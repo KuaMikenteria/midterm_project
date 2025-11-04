@@ -1,65 +1,148 @@
+/* === GLOBAL === */
 body {
-  font-family: Arial, sans-serif;
-  background: #eef1f5;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: linear-gradient(135deg, #e9eef5, #f7faff);
   margin: 0;
   padding: 0;
+  color: #333;
 }
 
+/* === CONTAINER === */
 .container {
   width: 90%;
-  max-width: 900px;
+  max-width: 950px;
   margin: 40px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  padding: 25px 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
+.container:hover {
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* === HEADINGS === */
 h1, h2, h3 {
   text-align: center;
-  color: #333;
+  color: #2d3a4a;
+  margin-bottom: 15px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: #264a9f;
+}
+
+/* === FORM ELEMENTS === */
+form {
+  margin-top: 10px;
 }
 
 input, select, textarea, button {
   width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #cfd8e3;
+  background: #f9fbfd;
   box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+input:focus, select:focus, textarea:focus {
+  border-color: #3b7ddd;
+  box-shadow: 0 0 5px rgba(59, 125, 221, 0.3);
+  outline: none;
+}
+
+/* === BUTTON === */
 button {
-  background: #3b7ddd;
+  background: linear-gradient(90deg, #3b7ddd, #265cc1);
   color: #fff;
   font-weight: bold;
   border: none;
   cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: background 0.3s ease, transform 0.1s ease;
 }
 
 button:hover {
-  background: #2f5dc1;
+  background: linear-gradient(90deg, #2f5dc1, #204a9e);
+  transform: translateY(-1px);
 }
 
+/* === RESPONSE MESSAGE === */
 #response {
   margin-top: 15px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 600;
+  color: #2d3a4a;
+  padding: 8px;
+  border-radius: 6px;
 }
 
+#response:empty {
+  display: none;
+}
+
+/* Success & Error feedback */
+#response.success {
+  background: #e5f9ed;
+  color: #257c3c;
+  border: 1px solid #9cdfb0;
+}
+
+#response.error {
+  background: #fdeaea;
+  color: #b91c1c;
+  border: 1px solid #f5c2c2;
+}
+
+/* === TABLE === */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 25px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 th, td {
-  padding: 8px;
-  border: 1px solid #ccc;
+  padding: 10px 8px;
+  border: 1px solid #d1d9e6;
   text-align: center;
+  font-size: 0.95rem;
 }
 
 th {
   background: #3b7ddd;
   color: white;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background: #f7faff;
+}
+
+tr:hover {
+  background: #eaf1ff;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+    padding: 20px;
+  }
+
+  table, th, td {
+    font-size: 0.85rem;
+  }
+
+  button {
+    font-size: 0.9rem;
+  }
 }
