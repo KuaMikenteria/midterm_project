@@ -11,7 +11,7 @@ CORS(app)
 DATA_FILE = "reservations.json"
 
 # Load external schema file
-with open("reservation.json", "r") as f:
+with open("reservations.json", "r") as f:
     reservation_schema = json.load(f)
 
 # --- Utility Functions ---
