@@ -12,83 +12,94 @@
 
     <!-- Reservation Form -->
     <form id="reservationForm">
-      <h3>Personal Details</h3>
       <input type="text" id="guest_name" placeholder="Full Name" required>
-      <input type="text" id="address" placeholder="Address" required>
-      <input type="text" id="country" placeholder="Country (e.g. Philippines)" required>
 
-      <p>Valid ID Type</p>
-      <select id="legal_id" required>
-        <option value="">-- Select Valid ID --</option>
-        <option value="PhilID/ePhilID">PhilID / ePhilID</option>
-        <option value="Passport">Passport</option>
-        <option value="Driver's License">Driver's License</option>
-        <option value="SSS card">SSS card</option>
-        <option value="GSIS card (UMID)">GSIS card (UMID)</option>
-        <option value="PRC ID">PRC ID</option>
-        <option value="School ID">School ID</option>
+      <input type="text" id="street_address" placeholder="Street Address" required>
+
+      <select id="municipality" required>
+        <option value="">Select Municipality</option>
+        <option>Manila</option>
+        <option>Quezon City</option>
+        <option>Cebu City</option>
+        <option>Davao City</option>
+        <option>Baguio</option>
+        <option>Iloilo City</option>
+        <option>Bacolod</option>
+        <option>Zamboanga City</option>
+        <option>Naga City</option>
+        <option>Legazpi City</option>
       </select>
 
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="tel" id="phone" placeholder="Phone Number" required>
-
-      <h3>Booking Details</h3>
-      <p>Resort Name</p>
-      <select id="resort_name" required>
-        <option value="">-- Select Resort --</option>
-        <option value="Arcadia Beach Resort">Arcadia Beach Resort</option>
-        <option value="Kuya Boy Beach Resort">Kuya Boy Beach Resort</option>
+      <select id="region" required>
+        <option value="">Select Region</option>
+        <option>National Capital Region (NCR)</option>
+        <option>Ilocos Region (Region I)</option>
+        <option>Cagayan Valley (Region II)</option>
+        <option>Central Luzon (Region III)</option>
+        <option>CALABARZON (Region IV-A)</option>
+        <option>MIMAROPA (Region IV-B)</option>
+        <option>Bicol Region (Region V)</option>
+        <option>Western Visayas (Region VI)</option>
+        <option>Central Visayas (Region VII)</option>
+        <option>Davao Region (Region XI)</option>
       </select>
 
-      <p>Check-In Date</p>
+      <select id="country" required>
+        <option value="">Select Country</option>
+        <option>Philippines</option>
+        <option>United States</option>
+        <option>Japan</option>
+        <option>China</option>
+        <option>Australia</option>
+        <option>Canada</option>
+        <option>Singapore</option>
+        <option>South Korea</option>
+        <option>United Kingdom</option>
+        <option>United Arab Emirates</option>
+      </select>
+
+      <select id="valid_id_type" required>
+        <option value="">Select Valid ID</option>
+        <option>PhilID/ePhilID</option>
+        <option>Passport</option>
+        <option>Driver's License</option>
+        <option>SSS card</option>
+        <option>GSIS card (UMID)</option>
+        <option>PRC ID</option>
+        <option>School ID</option>
+      </select>
+      <input type="text" id="valid_id_number" placeholder="ID Number" required>
+
+      <input type="email" id="email" placeholder="Email Address" required>
+      <input type="text" id="phone" placeholder="Phone (+63 or 09)" required>
+
       <input type="date" id="checkin_date" required>
-
-      <p>Check-Out Date</p>
       <input type="date" id="checkout_date" required>
 
-      <p>Number of Guests</p>
-      <input type="number" id="guests" placeholder="Guests" min="1" required>
+      <input type="number" id="guests" placeholder="Number of Guests" min="1" required>
 
-      <p>Payment Gateway</p>
-      <select id="payment_status" required>
-        <option value="">-- Select Payment Gateway --</option>
+      <select id="payment_gateway" required>
+        <option value="">Select Payment Method</option>
         <optgroup label="Traditional/Commercial Banks">
-          <option value="Philippine National Bank">Philippine National Bank</option>
-          <option value="BDO Unibank, Inc. (BDO)">BDO Unibank, Inc. (BDO)</option>
-          <option value="Bank of the Philippine Islands (BPI)">Bank of the Philippine Islands (BPI)</option>
-          <option value="Union Bank of the Philippines (Unionbank)">Union Bank of the Philippines (Unionbank)</option>
-          <option value="Land Bank of the Philippines (Landbank)">Land Bank of the Philippines (Landbank)</option>
+          <option>Philippine National Bank</option>
+          <option>BDO Unibank, Inc. (BDO)</option>
+          <option>Bank of the Philippine Islands (BPI)</option>
+          <option>Union Bank of the Philippines (Unionbank)</option>
+          <option>Land Bank of the Philippines (Landbank)</option>
         </optgroup>
         <optgroup label="E-Wallet">
-          <option value="GCash">GCash</option>
-          <option value="PayMaya">PayMaya</option>
-          <option value="PayPal">PayPal</option>
+          <option>GCash</option>
+          <option>PayMaya</option>
+          <option>PayPal</option>
         </optgroup>
       </select>
 
       <button type="submit">Submit Reservation</button>
     </form>
 
-    <h2>Reservations Database</h2>
-    <table id="reservationTable">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Guest Name</th>
-          <th>Resort</th>
-          <th>Check-in</th>
-          <th>Check-out</th>
-          <th>Guests</th>
-          <th>Payment</th>
-          <th>Created At</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div id="response"></div>
 
-    <p id="response"></p>
-  </div>
+    <script src="script.js"></script>
 
-  <script src="script.js"></script>
 </body>
 </html>
