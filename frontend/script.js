@@ -1,88 +1,85 @@
+const API_URL = "http://127.0.0.1:5000/reservations";
 const form = document.getElementById("reservationForm");
 const tableBody = document.querySelector("#reservationTable tbody");
 const responseMsg = document.getElementById("response");
 
-const API_URL = "http://127.0.0.1:5000/reservations"; // adjust if different
+// --- Date Restrictions ---
+const checkinInput = document.getElementById("checkin_date");
+const checkoutInput = document.getElementById("checkout_date");
 
-// Load existing reservations
+// Only allow current/future date for check-in
+const today = new Date().toISOString().split("T")[0];
+checkinInput.min = today;
+
+// When check-in changes, checkout must be at least 1 day after
+checkinInput.addEventListener("change", () => {
+  const checkin = new Date(checkinInput.value);
+  checkin.setDate(checkin.getDate() + 1);
+  checkoutInput.min = checkin.toISOString().split("T")[0];
+});
+
+// --- Fetch Reservations ---
 async function loadReservations() {
-  tableBody.innerHTML = "";
   const res = await fetch(API_URL);
   const data = await res.json();
-
-  data.forEach((reservation) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${reservation.id}</td>
-      <td>${reservation.guest_name}</td>
-      <td>${reservation.resort_name}</td>
-      <td>${reservation.checkin_date}</td>
-      <td>${reservation.checkout_date}</td>
-      <td>${reservation.guests}</td>
-      <td>${reservation.payment_status}</td>
-      <td>
-        <button onclick="editReservation(${reservation.id})">Edit</button>
-        <button onclick="deleteReservation(${reservation.id})">Delete</button>
-      </td>
+  tableBody.innerHTML = "";
+  data.forEach(r => {
+    const row = `
+      <tr>
+        <td>${r.id}</td>
+        <td>${r.guest_name}</td>
+        <td>${r.resort_name || "N/A"}</td>
+        <td>${r.checkin_date}</td>
+        <td>${r.checkout_date}</td>
+        <td>${r.guests}</td>
+        <td>${r.payment_status}</td>
+        <td>${r.created_at ? new Date(r.created_at).toLocaleString() : "-"}</td>
+      </tr>
     `;
-    tableBody.appendChild(row);
+    tableBody.insertAdjacentHTML("beforeend", row);
   });
 }
 
-// Submit new reservation
+// --- Submit Reservation ---
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const newReservation = {
-    guest_name: form.guest_name.value,
-    address: form.address.value,
-    country: form.country.value,
-    legal_id: form.legal_id.value,
-    email: form.email.value,
-    phone: form.phone.value,
-    resort_name: form.resort_name.value,
-    checkin_date: form.checkin_date.value,
-    checkout_date: form.checkout_date.value,
-    guests: form.guests.value,
-    payment_status: form.payment_status.value
+  const data = {
+    guest_name: document.getElementById("guest_name").value,
+    address: document.getElementById("address").value,
+    country: document.getElementById("country").value,
+    legal_id: document.getElementById("legal_id").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value,
+    resort_name: document.getElementById("resort_name").value,
+    checkin_date: document.getElementById("checkin_date").value,
+    checkout_date: document.getElementById("checkout_date").value,
+    guests: document.getElementById("guests").value,
+    payment_status: document.getElementById("payment_status").value
   };
 
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(newReservation)
-  });
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
 
-  if (res.ok) {
-    responseMsg.textContent = "✅ Reservation added successfully!";
-    form.reset();
-    loadReservations();
-  } else {
-    responseMsg.textContent = "❌ Failed to add reservation!";
+    const result = await res.json();
+
+    if (res.ok) {
+      responseMsg.textContent = "✅ Reservation submitted successfully!";
+      loadReservations();
+      form.reset();
+    } else {
+      responseMsg.textContent = "❌ Failed: " + (result.error || "Unknown error");
+      console.error(result);
+    }
+  } catch (err) {
+    responseMsg.textContent = "⚠️ Error connecting to server.";
+    console.error(err);
   }
 });
 
-// Edit reservation
-async function editReservation(id) {
-  const newStatus = prompt("Enter new payment status (pending, paid, failed, refunded):");
-  if (!newStatus) return;
-
-  await fetch(`${API_URL}/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ payment_status: newStatus })
-  });
-
-  loadReservations();
-}
-
-// Delete reservation
-async function deleteReservation(id) {
-  if (confirm("Are you sure you want to delete this reservation?")) {
-    await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-    loadReservations();
-  }
-}
-
-// Initialize
+// Initial load
 loadReservations();
