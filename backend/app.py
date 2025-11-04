@@ -1,106 +1,134 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask import Flask, jsonify, request
 import json
+import os
 from datetime import datetime
 from jsonschema import validate, ValidationError
 
 app = Flask(__name__)
-CORS(app)
 
-# JSON file for storage
-DATA_FILE = "reservations.json"
+# Base paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+RESERVATIONS_FILE = os.path.join(BASE_DIR, "reservations.json")
+SCHEMA_FILE = os.path.join(BASE_DIR, "reservation.json")
 
-# Load external schema file
-with open("reservations.json", "r") as f:
-    reservation_schema = json.load(f)
+# Load reservations
+if os.path.exists(RESERVATIONS_FILE):
+    with open(RESERVATIONS_FILE, "r") as f:
+        try:
+            reservations = json.load(f)
+        except json.JSONDecodeError:
+            reservations = []
+else:
+    reservations = []
 
-# --- Utility Functions ---
-def load_data():
-    try:
-        with open(DATA_FILE, "r") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        return []
+# Load schema
+with open(SCHEMA_FILE, "r") as f:
+    reservation = json.load(f)
 
-def save_data(data):
-    with open(DATA_FILE, "w") as file:
-        json.dump(data, file, indent=4)
 
-# --- API Routes ---
-
+# 🟢 GET - All reservations
 @app.route("/reservations", methods=["GET"])
 def get_reservations():
-    """Fetch all reservations"""
-    return jsonify(load_data())
+    return jsonify(reservations), 200
 
-@app.route("/reservations/<int:res_id>", methods=["GET"])
-def get_reservation(res_id):
-    """Get a specific reservation"""
-    reservations = load_data()
-    for r in reservations:
-        if r["id"] == res_id:
-            return jsonify(r)
-    return jsonify({"error": "Reservation not found"}), 404
 
+# 🟢 POST - Add a reservation
 @app.route("/reservations", methods=["POST"])
-def create_reservation():
-    """Create a new reservation"""
+def add_reservation():
     data = request.get_json()
+    print("📩 Received POST data:", data)
 
-    # Validate using JSON schema
+    # --- Data normalization ---
+    # Convert guests to int if possible
+    if "guests" in data:
+        try:
+            data["guests"] = int(data["guests"])
+        except (ValueError, TypeError):
+            return jsonify({"error": "Guests must be an integer"}), 400
+
+    # Convert resort_id if it comes as string
+    if "resort_id" in data:
+        try:
+            data["resort_id"] = int(data["resort_id"])
+        except (ValueError, TypeError):
+            return jsonify({"error": "resort_id must be an integer"}), 400
+
+    # Assign an auto-increment ID
+    data["id"] = len(reservations) + 1
+
+    # Add timestamps
+    now = datetime.utcnow().isoformat() + "Z"
+    data["created_at"] = now
+    data["updated_at"] = now
+
+    # Default payment status
+    if "payment_status" not in data:
+        data["payment_status"] = "pending"
+
+    # --- Validate against schema ---
     try:
-        validate(instance=data, schema=reservation_schema)
+        validate(instance=data, schema=reservation)
     except ValidationError as e:
-        return jsonify({"error": f"Invalid input: {e.message}"}), 400
+        print("❌ Schema Validation Error:", e.message)
+        return jsonify({"error": f"Schema validation failed: {e.message}"}), 400
 
-    reservations = load_data()
-    new_id = len(reservations) + 1
-    now = datetime.utcnow().isoformat()
+    # --- Save ---
+    reservations.append(data)
+    with open(RESERVATIONS_FILE, "w") as f:
+        json.dump(reservations, f, indent=2)
 
-    new_reservation = {
-        "id": new_id,
-        **data,
-        "created_at": now,
-        "updated_at": now
-    }
+    print("✅ Reservation added successfully!")
+    return jsonify({"message": "Reservation added successfully!", "data": data}), 201
 
-    reservations.append(new_reservation)
-    save_data(reservations)
 
-    return jsonify(new_reservation), 201
-
+# 🟠 PUT - Update reservation by ID
 @app.route("/reservations/<int:res_id>", methods=["PUT"])
 def update_reservation(res_id):
-    """Update reservation details"""
-    data = request.get_json()
-    reservations = load_data()
-
-    for reservation in reservations:
-        if reservation["id"] == res_id:
-            # Validate before update
-            try:
-                validate(instance=data, schema=reservation_schema)
-            except ValidationError as e:
-                return jsonify({"error": f"Invalid input: {e.message}"}), 400
-
-            reservation.update(data)
-            reservation["updated_at"] = datetime.utcnow().isoformat()
-            save_data(reservations)
-            return jsonify(reservation)
-
-    return jsonify({"error": "Reservation not found"}), 404
-
-@app.route("/reservations/<int:res_id>", methods=["DELETE"])
-def delete_reservation(res_id):
-    """Delete a reservation"""
-    reservations = load_data()
-    new_list = [r for r in reservations if r["id"] != res_id]
-
-    if len(new_list) == len(reservations):
+    existing = next((r for r in reservations if r["id"] == res_id), None)
+    if not existing:
         return jsonify({"error": "Reservation not found"}), 404
 
-    save_data(new_list)
-    return jsonify({"message": f"Reservation {res_id} deleted successfully"}), 200
+    updated = request.get_json()
+    print("✏️ Received update for ID", res_id, ":", updated)
+
+    # Merge fields
+    existing.update(updated)
+    existing["updated_at"] = datetime.utcnow().isoformat() + "Z"
+
+    # Convert numeric values
+    if "guests" in existing:
+        try:
+            existing["guests"] = int(existing["guests"])
+        except (ValueError, TypeError):
+            return jsonify({"error": "Guests must be an integer"}), 400
+
+    # Validate
+    try:
+        validate(instance=existing, schema=reservation)
+    except ValidationError as e:
+        return jsonify({"error": f"Schema validation failed: {e.message}"}), 400
+
+    # Save
+    with open(RESERVATIONS_FILE, "w") as f:
+        json.dump(reservations, f, indent=2)
+
+    return jsonify({"message": "Reservation updated successfully!", "data": existing}), 200
+
+
+# 🔴 DELETE - Remove reservation by ID
+@app.route("/reservations/<int:res_id>", methods=["DELETE"])
+def delete_reservation(res_id):
+    global reservations
+    filtered = [r for r in reservations if r["id"] != res_id]
+    if len(filtered) == len(reservations):
+        return jsonify({"error": "Reservation not found"}), 404
+
+    reservations = filtered
+    with open(RESERVATIONS_FILE, "w") as f:
+        json.dump(reservations, f, indent=2)
+
+    return jsonify({"message": f"Reservation {res_id} deleted successfully!"}), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True)
