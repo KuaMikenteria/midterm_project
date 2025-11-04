@@ -20,6 +20,7 @@
   "properties": {
     "id": { "type": "integer", "minimum": 1 },
     "resort_id": { "type": "integer", "minimum": 1 },
+    "resort_name": { "type": "string" },
     "guest_name": { "type": "string", "minLength": 1 },
 
     "street_address": { "type": "string", "minLength": 1 },
@@ -68,6 +69,7 @@
         "United Arab Emirates"
       ]
     },
+    "address": { "type": "string" },
 
     "valid_id": {
       "type": "object",
@@ -104,13 +106,11 @@
 
     "checkin_date": {
       "type": "string",
-      "format": "date",
-      "description": "Must be today or a future date"
+      "format": "date"
     },
     "checkout_date": {
       "type": "string",
-      "format": "date",
-      "description": "Must be later than checkin_date"
+      "format": "date"
     },
     "guests": { "type": "integer", "minimum": 1 },
 
@@ -128,16 +128,13 @@
       ]
     },
 
-    "resort_name": { "type": "string" },
     "room_type": { "type": "string" },
     "notes": { "type": "string" },
 
     "created_at": {
       "type": "string",
-      "format": "date-time",
-      "description": "The timestamp when the reservation form was submitted"
+      "format": "date-time"
     },
-
     "updated_at": { "type": "string", "format": "date-time" }
   },
   "additionalProperties": false

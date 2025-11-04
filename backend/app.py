@@ -28,12 +28,6 @@ with open(SCHEMA_FILE, "r") as f:
     reservation_schema = json.load(f)
 
 
-# === Helper Function ===
-def save_reservations():
-    with open(RESERVATIONS_FILE, "w") as f:
-        json.dump(reservations, f, indent=2)
-
-
 # === GET /reservations ===
 @app.route("/reservations", methods=["GET"])
 def get_reservations():
@@ -56,92 +50,99 @@ def add_reservation():
     if "resort_id" not in data:
         data["resort_id"] = 1
 
-    # --- Combine address fields ---
+    # Combine address fields (for readability)
     data["address"] = f"{data.get('street_address', '')}, {data.get('municipality', '')}, {data.get('region', '')}, {data.get('country', '')}"
 
-    # --- Ensure contact object ---
-    data["contact"] = {
-        "phone": data.pop("phone", ""),
-        "email": data.pop("email", "")
-    }
+    # Ensure contact object
+    if "contact" not in data:
+        data["contact"] = {
+            "phone": data.pop("phone", ""),
+            "email": data.pop("email", "")
+        }
 
-    # --- Ensure valid_id object ---
-    data["valid_id"] = {
-        "type": data.pop("valid_id_type", ""),
-        "number": data.pop("valid_id_number", "")
-    }
+    # Ensure valid_id object
+    if "valid_id" not in data:
+        data["valid_id"] = {
+            "type": data.pop("valid_id_type", ""),
+            "number": data.pop("valid_id_number", "")
+        }
 
-    # --- Add timestamps ---
+    # Add timestamps
     now = datetime.now().isoformat() + "Z"
     data["created_at"] = now
     data["updated_at"] = now
 
-    # --- Schema validation ---
+    # Schema validation
     try:
         validate(instance=data, schema=reservation_schema)
     except ValidationError as e:
         print("❌ Schema Validation Error:", e.message)
         return jsonify({"error": f"Schema validation failed: {e.message}"}), 400
 
-    # --- Assign unique ID ---
+    # Assign unique ID
     data["id"] = len(reservations) + 1
 
-    # --- Save to file ---
+    # Save to file
     reservations.append(data)
-    save_reservations()
+    with open(RESERVATIONS_FILE, "w") as f:
+        json.dump(reservations, f, indent=2)
 
     print("✅ Reservation added successfully!")
     return jsonify({"message": "Reservation added successfully!", "data": data}), 201
 
 
-# === PUT /reservations/<id> ===
+# === PUT /reservations/<int:id> === (for edit)
 @app.route("/reservations/<int:res_id>", methods=["PUT"])
 def update_reservation(res_id):
     data = request.get_json()
-    print(f"✏️ Updating reservation #{res_id} with data:", data)
+    print(f"📝 Updating reservation {res_id}: {data}")
 
-    # Find reservation
-    res = next((r for r in reservations if r["id"] == res_id), None)
-    if not res:
-        return jsonify({"error": "Reservation not found"}), 404
+    for reservation in reservations:
+        if reservation["id"] == res_id:
+            # Editable fields only
+            editable_fields = [
+                "guest_name", "street_address", "municipality", "region",
+                "country", "valid_id", "resort_name", "guests"
+            ]
+            for field in editable_fields:
+                if field in data:
+                    reservation[field] = data[field]
 
-    # Update editable fields
-    res["guest_name"] = data.get("guest_name", res["guest_name"])
-    res["resort_name"] = data.get("resort_name", res["resort_name"])
-    res["guests"] = int(data.get("guests", res["guests"]))
+            # Recombine address for display
+            reservation["address"] = f"{reservation.get('street_address', '')}, {reservation.get('municipality', '')}, {reservation.get('region', '')}, {reservation.get('country', '')}"
 
-    # Update address details
-    res["address"] = f"{data.get('street_address', '')}, {data.get('municipality', '')}, {data.get('region', '')}, {data.get('country', '')}"
+            reservation["updated_at"] = datetime.now().isoformat() + "Z"
 
-    # Update valid ID
-    if "valid_id_type" in data or "valid_id_number" in data:
-        res["valid_id"]["type"] = data.get("valid_id_type", res["valid_id"].get("type", ""))
-        res["valid_id"]["number"] = data.get("valid_id_number", res["valid_id"].get("number", ""))
+            # Revalidate after update
+            try:
+                validate(instance=reservation, schema=reservation_schema)
+            except ValidationError as e:
+                print("❌ Validation failed during update:", e.message)
+                return jsonify({"error": f"Schema validation failed: {e.message}"}), 400
 
-    # Update timestamp
-    res["updated_at"] = datetime.now().isoformat() + "Z"
+            # Save updated list
+            with open(RESERVATIONS_FILE, "w") as f:
+                json.dump(reservations, f, indent=2)
+            print("✅ Reservation updated successfully!")
+            return jsonify({"message": "Reservation updated successfully!", "data": reservation}), 200
 
-    # Save to file
-    save_reservations()
-
-    print("✅ Reservation updated successfully!")
-    return jsonify({"message": "Reservation updated successfully!", "data": res}), 200
+    return jsonify({"error": "Reservation not found"}), 404
 
 
-# === DELETE /reservations/<id> ===
+# === DELETE /reservations/<int:id> ===
 @app.route("/reservations/<int:res_id>", methods=["DELETE"])
 def delete_reservation(res_id):
     global reservations
-    print(f"🗑️ Deleting reservation #{res_id}")
+    original_count = len(reservations)
+    reservations = [r for r in reservations if r["id"] != res_id]
 
-    new_list = [r for r in reservations if r["id"] != res_id]
-    if len(new_list) == len(reservations):
+    if len(reservations) == original_count:
         return jsonify({"error": "Reservation not found"}), 404
 
-    reservations[:] = new_list
-    save_reservations()
+    with open(RESERVATIONS_FILE, "w") as f:
+        json.dump(reservations, f, indent=2)
 
-    print("✅ Reservation deleted successfully!")
+    print(f"🗑️ Deleted reservation {res_id}")
     return jsonify({"message": "Reservation deleted successfully!"}), 200
 
 
