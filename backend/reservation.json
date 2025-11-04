@@ -3,37 +3,31 @@
   "title": "Reservation",
   "type": "object",
   "required": [
-    "resort_id",
     "guest_name",
-    "address",       
-    "country",       
-    "legal_id",      
+    "address",
+    "country",
+    "legal_id",
+    "email",
+    "phone",
+    "resort_name",
     "checkin_date",
     "checkout_date",
     "guests",
-    "contact"
+    "payment_status"
   ],
   "properties": {
     "id": { "type": "integer", "minimum": 1 },
-    "resort_id": { "type": "integer", "minimum": 1 },
     "guest_name": { "type": "string", "minLength": 1 },
-    "address": { "type": "string", "minLength": 1 },       
-    "country": { "type": "string", "minLength": 1 },       
-    "legal_id": { "type": "string", "minLength": 1 },      
-    "contact": {
-      "type": "object",
-      "required": ["phone"],
-      "properties": {
-        "phone": { "type": "string", "minLength": 7 },
-        "email": { "type": "string", "format": "email" }
-      },
-      "additionalProperties": false
-    },
+    "address": { "type": "string", "minLength": 1 },
+    "country": { "type": "string", "minLength": 1 },
+    "legal_id": { "type": "string", "minLength": 1 },
+    "email": { "type": "string", "format": "email" },
+    "phone": { "type": "string", "pattern": "^\\+?[0-9]{7,15}$" },
+    "resort_name": { "type": "string", "enum": ["Arcadia Beach Resort", "Kuya Boy Beach Resort"] },
     "checkin_date": { "type": "string", "format": "date" },
     "checkout_date": { "type": "string", "format": "date" },
     "guests": { "type": "integer", "minimum": 1 },
-    "room_type": { "type": "string" },
-    "payment_status": { "type": "string", "enum": ["pending","paid","failed","refunded"] },
+    "payment_status": { "type": "string", "enum": ["pending", "paid", "failed", "refunded"] },
     "notes": { "type": "string" },
     "created_at": { "type": "string", "format": "date-time" },
     "updated_at": { "type": "string", "format": "date-time" }
