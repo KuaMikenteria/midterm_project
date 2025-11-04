@@ -1,11 +1,12 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import json
 import os
 from datetime import datetime
 from jsonschema import validate, ValidationError
 
 app = Flask(__name__)
-
+CORS(app)
 # Base paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 RESERVATIONS_FILE = os.path.join(BASE_DIR, "reservations.json")
