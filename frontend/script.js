@@ -7,55 +7,76 @@ const responseMsg = document.getElementById("response");
 const checkinInput = document.getElementById("checkin_date");
 const checkoutInput = document.getElementById("checkout_date");
 
-// Only allow current/future date for check-in
+// Restrict check-in to today or future
 const today = new Date().toISOString().split("T")[0];
 checkinInput.min = today;
 
-// When check-in changes, checkout must be at least 1 day after
+// Checkout must always be at least 1 day after check-in
 checkinInput.addEventListener("change", () => {
   const checkin = new Date(checkinInput.value);
   checkin.setDate(checkin.getDate() + 1);
   checkoutInput.min = checkin.toISOString().split("T")[0];
 });
 
-// --- Fetch Reservations ---
+// --- Load Reservations Table ---
 async function loadReservations() {
-  const res = await fetch(API_URL);
-  const data = await res.json();
-  tableBody.innerHTML = "";
-  data.forEach(r => {
-    const row = `
-      <tr>
-        <td>${r.id}</td>
-        <td>${r.guest_name}</td>
-        <td>${r.resort_name || "N/A"}</td>
-        <td>${r.checkin_date}</td>
-        <td>${r.checkout_date}</td>
-        <td>${r.guests}</td>
-        <td>${r.payment_status}</td>
-        <td>${r.created_at ? new Date(r.created_at).toLocaleString() : "-"}</td>
-      </tr>
-    `;
-    tableBody.insertAdjacentHTML("beforeend", row);
-  });
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    tableBody.innerHTML = "";
+    data.forEach(r => {
+      const row = `
+        <tr>
+          <td>${r.id}</td>
+          <td>${r.guest_name}</td>
+          <td>${r.street_address}, ${r.municipality}, ${r.region}</td>
+          <td>${r.country}</td>
+          <td>${r.contact?.phone || "N/A"}</td>
+          <td>${r.checkin_date}</td>
+          <td>${r.checkout_date}</td>
+          <td>${r.guests}</td>
+          <td>${r.payment_gateway}</td>
+          <td>${r.created_at ? new Date(r.created_at).toLocaleString() : "-"}</td>
+        </tr>
+      `;
+      tableBody.insertAdjacentHTML("beforeend", row);
+    });
+  } catch (err) {
+    console.error("Error loading reservations:", err);
+  }
 }
 
 // --- Submit Reservation ---
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  const phone = document.getElementById("phone").value.trim();
+  const phonePattern = /^(\+63|0)9\d{9}$/;
+  if (!phonePattern.test(phone)) {
+    responseMsg.textContent = "❌ Invalid phone number format. Use +639XXXXXXXXX or 09XXXXXXXXX.";
+    return;
+  }
+
   const data = {
+    resort_id: 1, // example static ID, adjust as needed
     guest_name: document.getElementById("guest_name").value,
-    address: document.getElementById("address").value,
+    street_address: document.getElementById("street_address").value,
+    municipality: document.getElementById("municipality").value,
+    region: document.getElementById("region").value,
     country: document.getElementById("country").value,
-    legal_id: document.getElementById("legal_id").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
-    resort_name: document.getElementById("resort_name").value,
+    valid_id: {
+      type: document.getElementById("valid_id_type").value,
+      number: document.getElementById("valid_id_number").value
+    },
+    contact: {
+      phone: phone,
+      email: document.getElementById("email").value
+    },
     checkin_date: document.getElementById("checkin_date").value,
     checkout_date: document.getElementById("checkout_date").value,
-    guests: document.getElementById("guests").value,
-    payment_status: document.getElementById("payment_status").value
+    guests: parseInt(document.getElementById("guests").value),
+    payment_gateway: document.getElementById("payment_gateway").value,
+    created_at: new Date().toISOString()
   };
 
   try {
@@ -69,15 +90,15 @@ form.addEventListener("submit", async (e) => {
 
     if (res.ok) {
       responseMsg.textContent = "✅ Reservation submitted successfully!";
-      loadReservations();
       form.reset();
+      loadReservations();
     } else {
       responseMsg.textContent = "❌ Failed: " + (result.error || "Unknown error");
-      console.error(result);
+      console.error("Validation Error:", result);
     }
   } catch (err) {
     responseMsg.textContent = "⚠️ Error connecting to server.";
-    console.error(err);
+    console.error("Network Error:", err);
   }
 });
 
