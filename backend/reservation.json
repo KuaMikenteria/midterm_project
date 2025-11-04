@@ -5,36 +5,134 @@
   "required": [
     "resort_id",
     "guest_name",
-    "address",
+    "street_address",
+    "municipality",
+    "region",
     "country",
-    "legal_id",
+    "valid_id",
+    "contact",
     "checkin_date",
     "checkout_date",
     "guests",
-    "contact"
+    "payment_gateway",
+    "created_at"
   ],
   "properties": {
     "id": { "type": "integer", "minimum": 1 },
     "resort_id": { "type": "integer", "minimum": 1 },
     "guest_name": { "type": "string", "minLength": 1 },
-    "address": { "type": "string", "minLength": 1 },
-    "country": { "type": "string", "minLength": 1 },
-    "legal_id": { "type": "string", "minLength": 1 },
+
+    "street_address": { "type": "string", "minLength": 1 },
+    "municipality": {
+      "type": "string",
+      "enum": [
+        "Manila",
+        "Quezon City",
+        "Cebu City",
+        "Davao City",
+        "Baguio",
+        "Iloilo City",
+        "Bacolod",
+        "Zamboanga City",
+        "Naga City",
+        "Legazpi City"
+      ]
+    },
+    "region": {
+      "type": "string",
+      "enum": [
+        "National Capital Region (NCR)",
+        "Ilocos Region (Region I)",
+        "Cagayan Valley (Region II)",
+        "Central Luzon (Region III)",
+        "CALABARZON (Region IV-A)",
+        "MIMAROPA (Region IV-B)",
+        "Bicol Region (Region V)",
+        "Western Visayas (Region VI)",
+        "Central Visayas (Region VII)",
+        "Davao Region (Region XI)"
+      ]
+    },
+    "country": {
+      "type": "string",
+      "enum": [
+        "Philippines",
+        "United States",
+        "Japan",
+        "China",
+        "Australia",
+        "Canada",
+        "Singapore",
+        "South Korea",
+        "United Kingdom",
+        "United Arab Emirates"
+      ]
+    },
+
+    "valid_id": {
+      "type": "object",
+      "required": ["type", "number"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "PhilID/ePhilID",
+            "Passport",
+            "Driver's License",
+            "SSS card",
+            "GSIS card (UMID)",
+            "PRC ID",
+            "School ID"
+          ]
+        },
+        "number": { "type": "string", "minLength": 5 }
+      }
+    },
+
     "contact": {
       "type": "object",
-      "required": ["phone"],
+      "required": ["phone", "email"],
       "properties": {
-        "phone": { "type": "string", "minLength": 7 },
+        "phone": { "type": "string", "pattern": "^\\+?\\d{7,15}$" },
         "email": { "type": "string", "format": "email" }
       }
     },
-    "checkin_date": { "type": "string", "format": "date" },
-    "checkout_date": { "type": "string", "format": "date" },
+
+    "checkin_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Must be today or a future date"
+    },
+    "checkout_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Must be later than checkin_date"
+    },
     "guests": { "type": "integer", "minimum": 1 },
+
+    "payment_gateway": {
+      "type": "string",
+      "enum": [
+        "Philippine National Bank",
+        "BDO Unibank, Inc. (BDO)",
+        "Bank of the Philippine Islands (BPI)",
+        "Union Bank of the Philippines (Unionbank)",
+        "Land Bank of the Philippines (Landbank)",
+        "GCash",
+        "PayMaya",
+        "PayPal"
+      ]
+    },
+
     "room_type": { "type": "string" },
-    "payment_status": { "type": "string", "enum": ["pending","paid","failed","refunded"] },
     "notes": { "type": "string" },
-    "created_at": { "type": "string", "format": "date-time" },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The timestamp when the reservation form was submitted"
+    },
+
     "updated_at": { "type": "string", "format": "date-time" }
   },
   "additionalProperties": false
