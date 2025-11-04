@@ -15,8 +15,20 @@
       <h3>Personal Details</h3>
       <input type="text" id="guest_name" placeholder="Full Name" required>
       <input type="text" id="address" placeholder="Address" required>
-      <input type="text" id="country" placeholder="Country (e.g. Philippines or PH)" required>
-      <input type="text" id="legal_id" placeholder="Legal ID (e.g. Passport)" required>
+      <input type="text" id="country" placeholder="Country (e.g. Philippines)" required>
+
+      <p>Valid ID Type</p>
+      <select id="legal_id" required>
+        <option value="">-- Select Valid ID --</option>
+        <option value="PhilID/ePhilID">PhilID / ePhilID</option>
+        <option value="Passport">Passport</option>
+        <option value="Driver's License">Driver's License</option>
+        <option value="SSS card">SSS card</option>
+        <option value="GSIS card (UMID)">GSIS card (UMID)</option>
+        <option value="PRC ID">PRC ID</option>
+        <option value="School ID">School ID</option>
+      </select>
+
       <input type="email" id="email" placeholder="Email" required>
       <input type="tel" id="phone" placeholder="Phone Number" required>
 
@@ -28,17 +40,30 @@
         <option value="Kuya Boy Beach Resort">Kuya Boy Beach Resort</option>
       </select>
 
-      <p>Check-In</p><input type="date" id="checkin_date" required>
-      <p>Check-out</p><input type="date" id="checkout_date" required>
-      <p>Number of Guests</p><input type="number" id="guests" placeholder="Guests" required>
+      <p>Check-In Date</p>
+      <input type="date" id="checkin_date" required>
 
-      <p>Payment Status</p>
+      <p>Check-Out Date</p>
+      <input type="date" id="checkout_date" required>
+
+      <p>Number of Guests</p>
+      <input type="number" id="guests" placeholder="Guests" min="1" required>
+
+      <p>Payment Gateway</p>
       <select id="payment_status" required>
-        <option value="">-- Select Payment Status --</option>
-        <option value="pending">Pending</option>
-        <option value="paid">Paid</option>
-        <option value="failed">Failed</option>
-        <option value="refunded">Refunded</option>
+        <option value="">-- Select Payment Gateway --</option>
+        <optgroup label="Traditional/Commercial Banks">
+          <option value="Philippine National Bank">Philippine National Bank</option>
+          <option value="BDO Unibank, Inc. (BDO)">BDO Unibank, Inc. (BDO)</option>
+          <option value="Bank of the Philippine Islands (BPI)">Bank of the Philippine Islands (BPI)</option>
+          <option value="Union Bank of the Philippines (Unionbank)">Union Bank of the Philippines (Unionbank)</option>
+          <option value="Land Bank of the Philippines (Landbank)">Land Bank of the Philippines (Landbank)</option>
+        </optgroup>
+        <optgroup label="E-Wallet">
+          <option value="GCash">GCash</option>
+          <option value="PayMaya">PayMaya</option>
+          <option value="PayPal">PayPal</option>
+        </optgroup>
       </select>
 
       <button type="submit">Submit Reservation</button>
@@ -54,8 +79,8 @@
           <th>Check-in</th>
           <th>Check-out</th>
           <th>Guests</th>
-          <th>Status</th>
-          <th>Action</th>
+          <th>Payment</th>
+          <th>Created At</th>
         </tr>
       </thead>
       <tbody></tbody>
