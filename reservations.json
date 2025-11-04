@@ -1,0 +1,16 @@
+[
+    {
+        "guest_name": "Kim Enteria",
+        "address": "Zone 1, Bulan, Sorsogon",
+        "country": "Philippines",
+        "legal_id": "National ID",
+        "email": "kim.enteria@sorsu.edu.ph",
+        "phone": "+6398111234567",
+        "resort_name": "Arcadia Beach Resort",
+        "checkin_date": "2025-11-12",
+        "checkout_date": "2025-11-13",
+        "guests": "4",
+        "payment_status": "refunded",
+        "id": 1
+    }
+]

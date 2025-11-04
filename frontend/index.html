@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resort Reservation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Book a Resort Reservation</h1>
+
+    <!-- Reservation Form -->
+    <form id="reservationForm">
+      <h3>Personal Details</h3>
+      <input type="text" id="guest_name" placeholder="Full Name" required>
+      <input type="text" id="address" placeholder="Address" required>
+      <input type="text" id="country" placeholder="Country (e.g. Philippines or PH)" required>
+      <input type="text" id="legal_id" placeholder="Legal ID (e.g. Passport)" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="tel" id="phone" placeholder="Phone Number" required>
+
+      <h3>Booking Details</h3>
+      <p>Resort Name</p>
+      <select id="resort_name" required>
+        <option value="">-- Select Resort --</option>
+        <option value="Arcadia Beach Resort">Arcadia Beach Resort</option>
+        <option value="Kuya Boy Beach Resort">Kuya Boy Beach Resort</option>
+      </select>
+
+      <p>Check-In</p><input type="date" id="checkin_date" required>
+      <p>Check-out</p><input type="date" id="checkout_date" required>
+      <p>Number of Guests</p><input type="number" id="guests" placeholder="Guests" required>
+
+      <p>Payment Status</p>
+      <select id="payment_status" required>
+        <option value="">-- Select Payment Status --</option>
+        <option value="pending">Pending</option>
+        <option value="paid">Paid</option>
+        <option value="failed">Failed</option>
+        <option value="refunded">Refunded</option>
+      </select>
+
+      <button type="submit">Submit Reservation</button>
+    </form>
+
+    <h2>Reservations Database</h2>
+    <table id="reservationTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Guest Name</th>
+          <th>Resort</th>
+          <th>Check-in</th>
+          <th>Check-out</th>
+          <th>Guests</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <p id="response"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
