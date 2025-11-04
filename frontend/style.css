@@ -1,148 +1,183 @@
-/* === GLOBAL === */
+/* ---------- General Page Layout ---------- */
 body {
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background: linear-gradient(135deg, #e9eef5, #f7faff);
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #eef1f5;
   margin: 0;
   padding: 0;
   color: #333;
 }
 
-/* === CONTAINER === */
 .container {
-  width: 90%;
-  max-width: 950px;
+  width: 95%;
+  max-width: 1000px;
   margin: 40px auto;
   padding: 25px 30px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.container:hover {
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
-}
-
-/* === HEADINGS === */
+/* ---------- Headings ---------- */
 h1, h2, h3 {
   text-align: center;
-  color: #2d3a4a;
-  margin-bottom: 15px;
+  color: #2b2b2b;
+  margin-bottom: 10px;
 }
 
-h1 {
-  font-size: 1.8rem;
-  color: #264a9f;
+h3 {
+  margin-top: 30px;
+  border-bottom: 2px solid #3b7ddd;
+  display: inline-block;
+  padding-bottom: 4px;
 }
 
-/* === FORM ELEMENTS === */
-form {
+/* ---------- Form Elements ---------- */
+form label {
+  font-weight: 600;
   margin-top: 10px;
+  display: block;
 }
 
 input, select, textarea, button {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid #cfd8e3;
-  background: #f9fbfd;
+  padding: 10px 12px;
+  margin: 8px 0 15px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
   box-sizing: border-box;
-  font-size: 1rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-size: 15px;
 }
 
 input:focus, select:focus, textarea:focus {
-  border-color: #3b7ddd;
-  box-shadow: 0 0 5px rgba(59, 125, 221, 0.3);
   outline: none;
+  border-color: #3b7ddd;
+  box-shadow: 0 0 4px rgba(59, 125, 221, 0.3);
 }
 
-/* === BUTTON === */
+/* ---------- Buttons ---------- */
 button {
-  background: linear-gradient(90deg, #3b7ddd, #265cc1);
+  background: #3b7ddd;
   color: #fff;
   font-weight: bold;
   border: none;
   cursor: pointer;
-  letter-spacing: 0.5px;
-  transition: background 0.3s ease, transform 0.1s ease;
+  transition: background 0.25s ease;
 }
 
 button:hover {
-  background: linear-gradient(90deg, #2f5dc1, #204a9e);
-  transform: translateY(-1px);
+  background: #2f5dc1;
 }
 
-/* === RESPONSE MESSAGE === */
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+#cancelEditBtn {
+  background: #999;
+}
+
+#cancelEditBtn:hover {
+  background: #777;
+}
+
+/* ---------- Response Message ---------- */
 #response {
   margin-top: 15px;
   text-align: center;
-  font-weight: 600;
-  color: #2d3a4a;
+  font-weight: bold;
+  font-size: 16px;
   padding: 8px;
   border-radius: 6px;
 }
 
-#response:empty {
-  display: none;
-}
-
-/* Success & Error feedback */
 #response.success {
-  background: #e5f9ed;
-  color: #257c3c;
-  border: 1px solid #9cdfb0;
+  color: #0f5132;
+  background: #d1e7dd;
+  border: 1px solid #badbcc;
 }
 
 #response.error {
-  background: #fdeaea;
-  color: #b91c1c;
-  border: 1px solid #f5c2c2;
+  color: #842029;
+  background: #f8d7da;
+  border: 1px solid #f5c2c7;
 }
 
-/* === TABLE === */
+/* ---------- Table Styles ---------- */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 25px;
-  border-radius: 8px;
-  overflow: hidden;
+  margin-top: 20px;
+  font-size: 15px;
 }
 
 th, td {
   padding: 10px 8px;
-  border: 1px solid #d1d9e6;
+  border: 1px solid #ccc;
   text-align: center;
-  font-size: 0.95rem;
 }
 
 th {
   background: #3b7ddd;
   color: white;
-  font-weight: bold;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 tr:nth-child(even) {
-  background: #f7faff;
+  background: #f7f9fb;
 }
 
 tr:hover {
-  background: #eaf1ff;
+  background: #e8f0fe;
 }
 
-/* === RESPONSIVE === */
+/* ---------- Action Buttons in Table ---------- */
+.edit-btn, .delete-btn {
+  width: 80px;
+  padding: 6px 8px;
+  margin: 2px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.edit-btn {
+  background: #ffc107;
+  color: #222;
+  border: none;
+}
+
+.edit-btn:hover {
+  background: #e0a800;
+}
+
+.delete-btn {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+}
+
+.delete-btn:hover {
+  background: #c82333;
+}
+
+/* ---------- Responsive Design ---------- */
 @media (max-width: 768px) {
   .container {
     width: 95%;
     padding: 20px;
   }
 
-  table, th, td {
-    font-size: 0.85rem;
+  table {
+    font-size: 13px;
   }
 
-  button {
-    font-size: 0.9rem;
+  button, input, select {
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 8px;
   }
 }
