@@ -32,5 +32,23 @@
     "notes": "Requesting early check-in and sea-view room",
     "created_at": "2025-11-04T09:43:13.371732Z",
     "updated_at": "2025-11-04T09:43:13.371732Z"
+  },
+  {
+    "guest_name": "Kim Enteria",
+    "address": "Zone -1, Bulan, Sorsogon",
+    "country": "Philippines",
+    "legal_id": "National ID",
+    "checkin_date": "2025-11-11",
+    "checkout_date": "2025-11-12",
+    "guests": 5,
+    "payment_status": "failed",
+    "contact": {
+      "phone": "+6398101234569",
+      "email": "kua.kimenteria01@gmail.com"
+    },
+    "resort_id": 1,
+    "id": 3,
+    "created_at": "2025-11-04T13:19:30.280764Z",
+    "updated_at": "2025-11-04T13:19:30.280764Z"
   }
 ]

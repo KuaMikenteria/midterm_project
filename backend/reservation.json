@@ -30,7 +30,7 @@
     },
     "checkin_date": { "type": "string", "format": "date" },
     "checkout_date": { "type": "string", "format": "date" },
-    "guests": { "type": "integer", "minimum": 10 },
+    "guests": { "type": "integer", "minimum": 1 },
     "room_type": { "type": "string" },
     "payment_status": { "type": "string", "enum": ["pending","paid","failed","refunded"] },
     "notes": { "type": "string" },
