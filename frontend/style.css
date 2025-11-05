@@ -1,183 +1,52 @@
-/* ---------- General Page Layout ---------- */
 body {
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: Arial, sans-serif;
   background: #eef1f5;
   margin: 0;
   padding: 0;
-  color: #333;
 }
-
 .container {
-  width: 95%;
-  max-width: 1000px;
+  width: 90%;
+  max-width: 950px;
   margin: 40px auto;
-  padding: 25px 30px;
+  padding: 20px;
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
 }
-
-/* ---------- Headings ---------- */
-h1, h2, h3 {
-  text-align: center;
-  color: #2b2b2b;
-  margin-bottom: 10px;
-}
-
-h3 {
-  margin-top: 30px;
-  border-bottom: 2px solid #3b7ddd;
-  display: inline-block;
-  padding-bottom: 4px;
-}
-
-/* ---------- Form Elements ---------- */
-form label {
-  font-weight: 600;
-  margin-top: 10px;
-  display: block;
-}
-
-input, select, textarea, button {
-  width: 100%;
-  padding: 10px 12px;
-  margin: 8px 0 15px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+h1, h2, h3 { text-align: center; color: #333; }
+input, select, button {
+  width: 100%; padding: 10px; margin: 6px 0;
+  border-radius: 6px; border: 1px solid #ccc;
   box-sizing: border-box;
-  font-size: 15px;
 }
-
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: #3b7ddd;
-  box-shadow: 0 0 4px rgba(59, 125, 221, 0.3);
-}
-
-/* ---------- Buttons ---------- */
 button {
-  background: #3b7ddd;
-  color: #fff;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  transition: background 0.25s ease;
+  background: #3b7ddd; color: #fff; font-weight: bold; border: none; cursor: pointer;
 }
-
-button:hover {
-  background: #2f5dc1;
-}
-
-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-#cancelEditBtn {
-  background: #999;
-}
-
-#cancelEditBtn:hover {
-  background: #777;
-}
-
-/* ---------- Response Message ---------- */
-#response {
-  margin-top: 15px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 16px;
-  padding: 8px;
-  border-radius: 6px;
-}
-
-#response.success {
-  color: #0f5132;
-  background: #d1e7dd;
-  border: 1px solid #badbcc;
-}
-
-#response.error {
-  color: #842029;
-  background: #f8d7da;
-  border: 1px solid #f5c2c7;
-}
-
-/* ---------- Table Styles ---------- */
-table {
+button:hover { background: #2f5dc1; }
+#searchBox {
+  margin: 10px 0;
+  padding: 10px;
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
   font-size: 15px;
 }
-
+table {
+  width: 100%; border-collapse: collapse; margin-top: 15px;
+}
 th, td {
-  padding: 10px 8px;
-  border: 1px solid #ccc;
-  text-align: center;
+  padding: 8px; border: 1px solid #ccc; text-align: center;
 }
-
-th {
-  background: #3b7ddd;
-  color: white;
-  font-weight: 600;
-  text-transform: uppercase;
+th { background: #3b7ddd; color: white; }
+.details-row .details-cell {
+  background: #f9fafc;
+  text-align: left;
+  padding: 15px;
 }
-
-tr:nth-child(even) {
-  background: #f7f9fb;
+.details-box {
+  line-height: 1.6;
+  font-size: 14px;
+  color: #333;
 }
-
-tr:hover {
-  background: #e8f0fe;
-}
-
-/* ---------- Action Buttons in Table ---------- */
-.edit-btn, .delete-btn {
-  width: 80px;
-  padding: 6px 8px;
-  margin: 2px;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 13px;
-}
-
-.edit-btn {
-  background: #ffc107;
-  color: #222;
-  border: none;
-}
-
-.edit-btn:hover {
-  background: #e0a800;
-}
-
-.delete-btn {
-  background: #dc3545;
-  color: #fff;
-  border: none;
-}
-
-.delete-btn:hover {
-  background: #c82333;
-}
-
-/* ---------- Responsive Design ---------- */
-@media (max-width: 768px) {
-  .container {
-    width: 95%;
-    padding: 20px;
-  }
-
-  table {
-    font-size: 13px;
-  }
-
-  button, input, select {
-    font-size: 14px;
-  }
-
-  th, td {
-    padding: 8px;
-  }
-}
+.success { color: green; text-align: center; font-weight: bold; }
+.error { color: red; text-align: center; font-weight: bold; }
