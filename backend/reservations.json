@@ -1,54 +1,26 @@
 [
   {
+    "resort_name": "Blue Horizon Resort",
     "guest_name": "Kim Enteria",
-    "address": "Zone 1, Bulan, Sorsogon",
-    "country": "Philippines",
-    "legal_id": "National ID",
-    "email": "kim.enteria@sorsu.edu.ph",
-    "phone": "+6398111234567",
-    "resort_name": "Arcadia Beach Resort",
-    "checkin_date": "2025-11-12",
-    "checkout_date": "2025-11-13",
-    "guests": "4",
-    "payment_status": "refunded",
-    "id": 1
-  },
-  {
-    "id": 2,
-    "resort_id": 2,
-    "guest_name": "Kim Ruzzel Enteria",
-    "address": "Zone 1, Bulan, Sorsogon",
-    "country": "Philippines",
-    "legal_id": "National ID",
-    "contact": {
-      "phone": "+6398101234567",
-      "email": "kim.enteria@sorsu.edu.ph"
-    },
-    "checkin_date": "2025-11-20",
-    "checkout_date": "2025-11-22",
-    "guests": 10,
-    "room_type": "Deluxe Beachfront Villa",
-    "payment_status": "paid",
-    "notes": "Requesting early check-in and sea-view room",
-    "created_at": "2025-11-04T09:43:13.371732Z",
-    "updated_at": "2025-11-04T09:43:13.371732Z"
-  },
-  {
-    "guest_name": "Kim Enteria",
-    "address": "Zone -1, Bulan, Sorsogon",
-    "country": "Philippines",
-    "legal_id": "National ID",
-    "checkin_date": "2025-11-11",
-    "checkout_date": "2025-11-12",
-    "guests": 5,
-    "payment_status": "failed",
-    "contact": {
-      "phone": "+6398101234569",
-      "email": "kua.kimenteria01@gmail.com"
-    },
+    "street_address": "Zone-1",
+    "municipality": "Quezon City",
+    "region": "Davao Region (Region XI)",
+    "country": "Canada",
+    "checkin_date": "2025-11-06",
+    "checkout_date": "2025-11-14",
+    "guests": 8,
+    "payment_gateway": "Philippine National Bank",
     "resort_id": 1,
-    "id": 3,
-    "created_at": "2025-11-04T13:19:30.280764Z",
-    "updated_at": "2025-11-04T13:19:30.280764Z"
+    "contact": {
+      "phone": "09876543212",
+      "email": "hayersorodothy.92@gmail.com"
+    },
+    "valid_id": {
+      "type": "Driver's License",
+      "number": "1234-4567-8907-1234"
+    },
+    "created_at": "2025-11-06T07:47:31.105719Z",
+    "updated_at": "2025-11-06T07:47:31.105719Z",
+    "id": 1
   }
 ]

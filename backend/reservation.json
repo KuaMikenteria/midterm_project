@@ -97,8 +97,8 @@
       "properties": {
         "phone": {
           "type": "string",
-          "pattern": "^(\\+63|0)9\\d{9}$",
-          "description": "Must be a valid PH mobile number format, e.g. +639171234567 or 09171234567"
+          "pattern": "^09\\d{9}$",
+          "description": "Must be a valid PH mobile number starting with 09 and 11 digits (e.g., 09171234567)"
         },
         "email": { "type": "string", "format": "email" }
       }

@@ -1,122 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Resort Reservation</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="container">
-    <h1>Book a Resort Reservation</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resort Reservation</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>🏝️ Resort Reservation Form</h1>
 
-    <form id="reservationForm">
-      <input type="hidden" id="edit_id" value="">
-      <h3>Personal Details</h3>
+      <form id="reservationForm">
+        <input type="hidden" id="reservation_id" name="reservation_id" />
+        <h3>Personal Details</h3>
 
-      <label>Full Name</label>
-      <input type="text" id="guest_name" required>
+        <label>Full Name</label>
+        <input type="text" id="guest_name" name="guest_name" required />
 
-      <label>Street Address</label>
-      <input type="text" id="street_address" required>
+        <label>Street Address</label>
+        <input type="text" id="street_address" name="street_address" required />
 
-      <label>Municipality / City</label>
-      <select id="municipal" required>
-        <option value="">-- Select Municipality / City --</option>
-        <option>Quezon City</option><option>Makati</option><option>Manila</option>
-        <option>Cebu City</option><option>Davao City</option><option>Taguig</option>
-        <option>Baguio</option><option>Iloilo City</option><option>Pasig</option>
-        <option>Cagayan de Oro</option>
-      </select>
+        <label>Municipality / City</label>
+        <select id="municipality" name="municipality" required>
+          <option value="">-- Select Municipality / City --</option>
+          <option>Quezon City</option>
+          <option>Manila</option>
+          <option>Cebu City</option>
+          <option>Davao City</option>
+          <option>Baguio</option>
+          <option>Iloilo City</option>
+          <option>Bacolod</option>
+          <option>Zamboanga City</option>
+          <option>Naga City</option>
+          <option>Legazpi City</option>
+        </select>
 
-      <label>Region / State</label>
-      <select id="region" required>
-        <option value="">-- Select Region --</option>
-        <option>NCR</option><option>Region I (Ilocos)</option><option>Region II (Cagayan Valley)</option>
-        <option>Region III (Central Luzon)</option><option>Region IV-A (CALABARZON)</option>
-        <option>Region V (Bicol Region)</option><option>Region VI (Western Visayas)</option>
-        <option>Region VII (Central Visayas)</option><option>Region XI (Davao Region)</option><option>CAR (Cordillera)</option>
-      </select>
+        <label>Region / State</label>
+        <select id="region" name="region" required>
+          <option value="">-- Select Region --</option>
+          <option>National Capital Region (NCR)</option>
+          <option>Ilocos Region (Region I)</option>
+          <option>Cagayan Valley (Region II)</option>
+          <option>Central Luzon (Region III)</option>
+          <option>CALABARZON (Region IV-A)</option>
+          <option>MIMAROPA (Region IV-B)</option>
+          <option>Bicol Region (Region V)</option>
+          <option>Western Visayas (Region VI)</option>
+          <option>Central Visayas (Region VII)</option>
+          <option>Davao Region (Region XI)</option>
+        </select>
 
-      <label>Country</label>
-      <select id="country" required>
-        <option value="">-- Select Country --</option>
-        <option>Philippines</option><option>Japan</option><option>Singapore</option>
-        <option>United States</option><option>Canada</option><option>Australia</option>
-        <option>United Kingdom</option><option>France</option><option>South Korea</option><option>China</option>
-      </select>
+        <label>Country</label>
+        <select id="country" name="country" required>
+          <option value="">-- Select Country --</option>
+          <option>Philippines</option>
+          <option>United States</option>
+          <option>Japan</option>
+          <option>China</option>
+          <option>Australia</option>
+          <option>Canada</option>
+          <option>Singapore</option>
+          <option>South Korea</option>
+          <option>United Kingdom</option>
+          <option>United Arab Emirates</option>
+        </select>
 
-      <label>Valid ID Type</label>
-      <select id="valid_id_type" required>
-        <option value="">-- Select Valid ID --</option>
-        <option>PhilID/ePhilID</option><option>Passport</option><option>Driver's License</option>
-        <option>SSS card</option><option>GSIS card (UMID)</option><option>PRC ID</option><option>School ID</option>
-      </select>
+        <label>Valid ID Type</label>
+        <select id="valid_id_type" name="valid_id_type" required>
+          <option value="">-- Select Valid ID --</option>
+          <option>PhilID/ePhilID</option>
+          <option>Passport</option>
+          <option>Driver's License</option>
+          <option>SSS card</option>
+          <option>GSIS card (UMID)</option>
+          <option>PRC ID</option>
+          <option>School ID</option>
+        </select>
 
-      <label>Valid ID Number</label>
-      <input type="text" id="valid_id_number" required>
+        <label>Valid ID Number</label>
+        <input
+          type="text"
+          id="valid_id_number"
+          name="valid_id_number"
+          required
+        />
 
-      <label>Email</label>
-      <input type="email" id="email" required>
+        <label>Email</label>
+        <input type="email" id="email" name="email" required />
 
-      <label>Phone</label>
-      <input type="tel" id="phone" placeholder="+639XXXXXXXXX" required>
+        <label>Phone</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          pattern="^09\d{9}$"
+          title="Please enter a valid PH mobile number (11 digits, e.g., 09171234567)"
+          maxlength="11"
+          required
+        />
 
-      <h3>Booking Details</h3>
+        <h3>Booking Details</h3>
 
-      <label>Resort Name</label>
-      <select id="resort_name" required>
-        <option value="">-- Select Resort --</option>
-        <option>Arcadia Beach Resort</option>
-        <option>Kuya Boy Beach Resort</option>
-        <option>Blue Horizon Resort</option>
-        <option>White Sand Paradise</option>
-        <option>Mountain View Villa</option>
-      </select>
+        <label>Resort Name</label>
+        <select id="resort_name" name="resort_name" required>
+          <option value="">-- Select Resort --</option>
+          <option>Arcadia Beach Resort</option>
+          <option>Kuya Boy Beach Resort</option>
+          <option>Blue Horizon Resort</option>
+          <option>White Sand Paradise</option>
+          <option>Mountain View Villa</option>
+        </select>
 
-      <label>Check-In Date</label>
-      <input type="date" id="checkin_date" required>
+        <label>Check-In Date</label>
+        <input type="date" id="checkin_date" name="checkin_date" required />
 
-      <label>Check-Out Date</label>
-      <input type="date" id="checkout_date" required>
+        <label>Check-Out Date</label>
+        <input type="date" id="checkout_date" name="checkout_date" required />
 
-      <label>Number of Guests</label>
-      <input type="number" id="guests" min="1" required>
+        <label>Number of Guests</label>
+        <input type="number" id="guests" name="guests" min="1" required />
 
-      <label>Payment Gateway</label>
-      <select id="payment_gateway" required>
-        <optgroup label="Traditional Banks">
-          <option>PNB</option><option>BDO</option><option>BPI</option><option>Unionbank</option><option>Landbank</option>
-        </optgroup>
-        <optgroup label="E-Wallet">
-          <option>GCash</option><option>PayMaya</option><option>PayPal</option>
-        </optgroup>
-      </select>
+        <label>Payment Gateway</label>
+        <select id="payment_gateway" name="payment_gateway" required>
+          <option>Philippine National Bank</option>
+          <option>BDO Unibank, Inc. (BDO)</option>
+          <option>Bank of the Philippine Islands (BPI)</option>
+          <option>Union Bank of the Philippines (Unionbank)</option>
+          <option>Land Bank of the Philippines (Landbank)</option>
+          <option>GCash</option>
+          <option>PayMaya</option>
+          <option>PayPal</option>
+        </select>
 
-      <div style="display:flex; gap:10px;">
         <button type="submit" id="submitBtn">Create Reservation</button>
-        <button type="button" id="cancelEditBtn" style="display:none;background:#aaa;">Cancel Edit</button>
+        <button
+          type="button"
+          id="cancelEditBtn"
+          class="cancel-btn"
+          style="display: none"
+        >
+          Cancel Edit
+        </button>
+      </form>
+
+      <h2>Reservations Database</h2>
+      <table id="reservationsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Guest</th>
+            <th>Address</th>
+            <th>Resort</th>
+            <th>Check-In</th>
+            <th>Check-Out</th>
+            <th>Guests</th>
+            <th>Payment</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- View Modal -->
+    <div id="viewModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Reservation Details</h3>
+        <pre id="modalDetails"></pre>
       </div>
-    </form>
+    </div>
 
-    <h2>Reservations Database</h2>
-
-    <!-- 🔍 Search Filter -->
-    <input type="text" id="searchBox" placeholder="Search by guest, resort, or city..." />
-
-    <table id="reservationTable">
-      <thead>
-        <tr>
-          <th>ID</th><th>Guest Name</th><th>Address</th><th>Resort</th>
-          <th>Check-In</th><th>Check-Out</th><th>Guests</th><th>Payment</th><th>Created</th><th>Action</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <p id="response"></p>
-  </div>
-
-  <script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
