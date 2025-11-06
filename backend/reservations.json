@@ -1,14 +1,14 @@
 [
   {
     "resort_name": "Blue Horizon Resort",
-    "guest_name": "Kim Enteria",
-    "street_address": "Zone-1",
-    "municipality": "Quezon City",
-    "region": "Davao Region (Region XI)",
-    "country": "Canada",
+    "guest_name": "Jim Enteria",
+    "street_address": "Zone-11",
+    "municipality": "Manila",
+    "region": "National Capital Region (NCR)",
+    "country": "United Arab Emirates",
     "checkin_date": "2025-11-06",
     "checkout_date": "2025-11-14",
-    "guests": 8,
+    "guests": 9,
     "payment_gateway": "Philippine National Bank",
     "resort_id": 1,
     "contact": {
@@ -20,7 +20,7 @@
       "number": "1234-4567-8907-1234"
     },
     "created_at": "2025-11-06T07:47:31.105719Z",
-    "updated_at": "2025-11-06T07:47:31.105719Z",
+    "updated_at": "2025-11-06T09:56:58.945927Z",
     "id": 1
   }
 ]
