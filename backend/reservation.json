@@ -2,6 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Reservation",
   "type": "object",
+
   "required": [
     "resort_id",
     "guest_name",
@@ -17,13 +18,18 @@
     "payment_gateway",
     "created_at"
   ],
+
   "properties": {
     "id": { "type": "integer", "minimum": 1 },
+
     "resort_id": { "type": "integer", "minimum": 1 },
+
     "resort_name": { "type": "string" },
+
     "guest_name": { "type": "string", "minLength": 1 },
 
     "street_address": { "type": "string", "minLength": 1 },
+
     "municipality": {
       "type": "string",
       "enum": [
@@ -39,6 +45,7 @@
         "Legazpi City"
       ]
     },
+
     "region": {
       "type": "string",
       "enum": [
@@ -54,6 +61,7 @@
         "Davao Region (Region XI)"
       ]
     },
+
     "country": {
       "type": "string",
       "enum": [
@@ -88,7 +96,10 @@
             "School ID"
           ]
         },
-        "number": { "type": "string", "minLength": 5 }
+        "number": {
+          "type": "string",
+          "minLength": 5
+        }
       }
     },
 
@@ -98,15 +109,18 @@
       "properties": {
         "phone": {
           "type": "string",
-          "pattern": "^09\\d{9}$",
-          "description": "Must be a valid PH mobile number starting with 09 and 11 digits (e.g., 09171234567)"
+          "pattern": "^09\\d{9}$"
         },
-        "email": { "type": "string", "format": "email" }
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
       }
     },
 
     "checkin_date": { "type": "string", "format": "date" },
     "checkout_date": { "type": "string", "format": "date" },
+
     "guests": { "type": "integer", "minimum": 1 },
 
     "payment_gateway": {
@@ -129,5 +143,6 @@
     "created_at": { "type": "string", "format": "date-time" },
     "updated_at": { "type": "string", "format": "date-time" }
   },
+
   "additionalProperties": false
 }

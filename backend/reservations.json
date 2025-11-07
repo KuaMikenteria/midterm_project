@@ -8,11 +8,11 @@
     "country": "United Arab Emirates",
     "checkin_date": "2025-11-06",
     "checkout_date": "2025-11-14",
-    "guests": 9,
+    "guests": 1,
     "payment_gateway": "Philippine National Bank",
     "resort_id": 1,
     "contact": {
-      "phone": "09876543212",
+      "phone": "09175556666",
       "email": "hayersorodothy.92@gmail.com"
     },
     "valid_id": {
@@ -20,7 +20,7 @@
       "number": "1234-4567-8907-1234"
     },
     "created_at": "2025-11-06T07:47:31.105719Z",
-    "updated_at": "2025-11-06T09:56:58.945927Z",
+    "updated_at": "2025-11-07T10:40:56.521397Z",
     "id": 1
   },
   {
@@ -74,5 +74,57 @@
     "created_at": "2025-11-06T11:35:20.146920Z",
     "updated_at": "2025-11-06T12:12:09.068525Z",
     "id": 3
+  },
+  {
+    "resort_name": "Arcadia Beach Resort",
+    "guest_name": "Kim Ruzzel Enteria",
+    "street_address": "Zone-1",
+    "municipality": "Quezon City",
+    "region": "Cagayan Valley (Region II)",
+    "country": "Japan",
+    "checkin_date": "2025-11-07",
+    "checkout_date": "2025-11-21",
+    "guests": 9,
+    "payment_gateway": "Philippine National Bank",
+    "contact": {
+      "phone": "09171234567",
+      "email": "hayersorodothy.92@gmail.com"
+    },
+    "valid_id": {
+      "type": "School ID",
+      "number": "1234-4567-8907-1234"
+    },
+    "resort_id": 1,
+    "created_at": "2025-11-07T10:28:54.907505Z",
+    "updated_at": "2025-11-07T10:28:54.907505Z",
+    "room_type": "",
+    "notes": "",
+    "id": 4
+  },
+  {
+    "resort_name": "Kuya Boy Beach Resort",
+    "guest_name": "Kim Enteria Kritiko",
+    "street_address": "Zone 2 Updated",
+    "municipality": "Manila",
+    "region": "National Capital Region (NCR)",
+    "country": "Philippines",
+    "valid_id": {
+      "type": "Passport",
+      "number": "A12345678"
+    },
+    "contact": {
+      "phone": "09179998888",
+      "email": "kimenteria_updated@example.com"
+    },
+    "checkin_date": "2025-11-10",
+    "checkout_date": "2025-11-15",
+    "guests": 5,
+    "payment_gateway": "BDO Unibank, Inc. (BDO)",
+    "room_type": "Deluxe Room",
+    "notes": "Updated reservation.",
+    "resort_id": 1,
+    "created_at": "2025-11-07T10:34:40.082351Z",
+    "updated_at": "2025-11-07T10:37:56.558055Z",
+    "id": 5
   }
 ]

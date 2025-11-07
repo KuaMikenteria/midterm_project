@@ -8,7 +8,7 @@ import re
 
 app = Flask(__name__)
 
-# CORS: allow everything during dev (localhost:5500 -> 127.0.0.1:5000)
+# CORS
 CORS(
     app,
     resources={r"/*": {"origins": "*"}},
@@ -34,7 +34,6 @@ else:
 with open(SCHEMA_FILE, "r") as f:
     reservation_schema = json.load(f)
 
-
 # ---- Helpers ----
 
 def next_id():
@@ -44,7 +43,6 @@ def next_id():
 
 
 def now_utc_iso():
-    # timezone-aware UTC
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
@@ -58,19 +56,16 @@ ALLOWED_VALID_IDS = {
     "School ID",
 }
 
-PHONE_REGEX = re.compile(r"^09\d{9}$")  # strict 11-digit PH mobile (09XXXXXXXXX)
+PHONE_REGEX = re.compile(r"^09\d{9}$")
 
 
 def normalize_payload(data: dict) -> dict:
     """
-    Accepts BOTH styles and returns a canonical reservation dict:
-      - contact: { phone, email }
-      - valid_id: { type, number }
-    Does NOT pop/overwrite user-provided objects accidentally.
+    Converts incoming payload into schema-friendly canonical format.
     """
     data = dict(data or {})
 
-    # contact
+    # Build contact object
     if isinstance(data.get("contact"), dict):
         contact = {
             "phone": data["contact"].get("phone", ""),
@@ -83,7 +78,7 @@ def normalize_payload(data: dict) -> dict:
         }
     data["contact"] = contact
 
-    # valid_id
+    # Build valid_id object
     if isinstance(data.get("valid_id"), dict):
         valid_id = {
             "type": data["valid_id"].get("type", ""),
@@ -96,28 +91,27 @@ def normalize_payload(data: dict) -> dict:
         }
     data["valid_id"] = valid_id
 
-    # guests -> int
+    # guests → int
     try:
         data["guests"] = int(data.get("guests", 1))
     except (ValueError, TypeError):
-        data["guests"] = None  # will fail validation later with a clear message
+        data["guests"] = None
 
     # default resort_id
     data["resort_id"] = data.get("resort_id", 1)
+
+    # ✅ Remove disallowed raw fields
+    for key in ("email", "phone", "valid_id_type", "valid_id_number"):
+        data.pop(key, None)
 
     return data
 
 
 def validate_business_rules(data: dict):
-    """
-    Raise a readable error message (string) if something is invalid.
-    """
-    # Phone
     phone = data.get("contact", {}).get("phone", "")
     if not PHONE_REGEX.match(phone or ""):
         return "Phone must match 11-digit PH mobile format: 09XXXXXXXXX (e.g., 09171234567)"
 
-    # Valid ID type
     vid_type = data.get("valid_id", {}).get("type", "")
     if vid_type not in ALLOWED_VALID_IDS:
         return (
@@ -125,17 +119,14 @@ def validate_business_rules(data: dict):
             + ", ".join(sorted(ALLOWED_VALID_IDS))
         )
 
-    # Valid ID number
     vid_num = data.get("valid_id", {}).get("number", "")
     if not isinstance(vid_num, str) or len(vid_num) < 5:
         return "valid_id.number must be a string with at least 5 characters"
 
-    # Guests
     guests = data.get("guests")
     if not isinstance(guests, int) or guests < 1:
         return "guests must be an integer >= 1"
 
-    # Dates (optional extra check)
     ci = data.get("checkin_date")
     co = data.get("checkout_date")
     if ci and co and ci > co:
@@ -145,9 +136,6 @@ def validate_business_rules(data: dict):
 
 
 def validate_against_schema(full_record: dict):
-    """
-    Validate the fully populated record against JSON schema.
-    """
     try:
         validate(instance=full_record, schema=reservation_schema)
     except ValidationError as e:
@@ -157,27 +145,23 @@ def validate_against_schema(full_record: dict):
 
 @app.after_request
 def add_cors_headers(resp):
-    # Extra CORS headers for all responses (helps with preflight/MS browsers)
     resp.headers["Access-Control-Allow-Origin"] = "*"
     resp.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
     resp.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
     return resp
 
 
-# === OPTIONS (preflight) ===
 @app.route("/reservations", methods=["OPTIONS"])
 @app.route("/reservations/<int:_id>", methods=["OPTIONS"])
 def options(_id=None):
     return make_response(("", 204))
 
 
-# === GET /reservations ===
 @app.route("/reservations", methods=["GET"])
 def get_reservations():
     return jsonify(reservations), 200
 
 
-# === GET /reservations/<id> ===
 @app.route("/reservations/<int:res_id>", methods=["GET"])
 def get_reservation_by_id(res_id):
     for res in reservations:
@@ -186,7 +170,6 @@ def get_reservation_by_id(res_id):
     return jsonify({"error": "Reservation not found"}), 404
 
 
-# === POST /reservations ===
 @app.route("/reservations", methods=["POST"])
 def add_reservation():
     raw = request.get_json(silent=True) or {}
@@ -194,12 +177,10 @@ def add_reservation():
 
     data = normalize_payload(raw)
 
-    # Timestamps
     now = now_utc_iso()
     data["created_at"] = now
     data["updated_at"] = now
 
-    # Merge defaults for missing optional keys to satisfy schema
     data.setdefault("resort_name", "")
     data.setdefault("street_address", "")
     data.setdefault("municipality", "")
@@ -211,22 +192,18 @@ def add_reservation():
     data.setdefault("checkin_date", "")
     data.setdefault("checkout_date", "")
 
-    # Business validations first (clear human-readable messages)
     err = validate_business_rules(data)
     if err:
         print("❌ Business Validation Error:", err)
         return jsonify({"error": err}), 400
 
-    # Assign unique ID
     data["id"] = next_id()
 
-    # Schema validation (on canonical record)
     err = validate_against_schema(data)
     if err:
         print("❌ Schema Validation Error:", err)
         return jsonify({"error": err}), 400
 
-    # Save
     reservations.append(data)
     with open(RESERVATIONS_FILE, "w") as f:
         json.dump(reservations, f, indent=2)
@@ -235,13 +212,11 @@ def add_reservation():
     return jsonify({"message": "Reservation added successfully!", "data": data}), 201
 
 
-# === PUT /reservations/<id> ===
 @app.route("/reservations/<int:res_id>", methods=["PUT"])
 def update_reservation(res_id):
     raw = request.get_json(silent=True) or {}
     print(f"✏️ Updating reservation {res_id}: {raw}")
 
-    # find record
     idx = next((i for i, r in enumerate(reservations) if r.get("id") == res_id), None)
     if idx is None:
         return jsonify({"error": "Reservation not found"}), 404
@@ -249,44 +224,38 @@ def update_reservation(res_id):
     existing = reservations[idx]
     incoming = normalize_payload(raw)
 
-    # Merge fields (only update those provided, keep existing otherwise)
-    merged = {
-        **existing,
-        **{k: v for k, v in incoming.items() if v not in (None, "")},  # shallow merge
-    }
+    # === merge base fields ===
+    merged = {**existing}
 
-    # Deep-merge contact
+    for key, value in incoming.items():
+        if key not in ("contact", "valid_id", "guests") and value not in ("", None):
+            merged[key] = value
+
     merged["contact"] = {
-        "phone": incoming["contact"]["phone"] or existing.get("contact", {}).get("phone", ""),
-        "email": incoming["contact"]["email"] or existing.get("contact", {}).get("email", ""),
+        "phone": incoming["contact"]["phone"] or existing["contact"].get("phone", ""),
+        "email": incoming["contact"]["email"] or existing["contact"].get("email", ""),
     }
 
-    # Deep-merge valid_id
     merged["valid_id"] = {
-        "type": incoming["valid_id"]["type"] or existing.get("valid_id", {}).get("type", ""),
-        "number": incoming["valid_id"]["number"] or existing.get("valid_id", {}).get("number", ""),
+        "type": incoming["valid_id"]["type"] or existing["valid_id"].get("type", ""),
+        "number": incoming["valid_id"]["number"] or existing["valid_id"].get("number", ""),
     }
 
-    # guests
     if incoming.get("guests") is not None:
         merged["guests"] = incoming["guests"]
 
-    # timestamps
     merged["updated_at"] = now_utc_iso()
 
-    # Business validations
     err = validate_business_rules(merged)
     if err:
         print("❌ Business Validation Error (PUT):", err)
         return jsonify({"error": err}), 400
 
-    # Schema validation
     err = validate_against_schema(merged)
     if err:
         print("❌ Schema Validation Error (PUT):", err)
         return jsonify({"error": err}), 400
 
-    # Save back
     reservations[idx] = merged
     with open(RESERVATIONS_FILE, "w") as f:
         json.dump(reservations, f, indent=2)
@@ -294,7 +263,6 @@ def update_reservation(res_id):
     return jsonify({"message": "Reservation updated successfully!", "data": merged}), 200
 
 
-# === DELETE /reservations/<id> ===
 @app.route("/reservations/<int:res_id>", methods=["DELETE"])
 def delete_reservation(res_id):
     global reservations
@@ -311,5 +279,4 @@ def delete_reservation(res_id):
 
 
 if __name__ == "__main__":
-    # Bind to 127.0.0.1:5000 by default
     app.run(host="127.0.0.1", port=5000, debug=True)
