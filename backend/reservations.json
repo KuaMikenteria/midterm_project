@@ -22,5 +22,57 @@
     "created_at": "2025-11-06T07:47:31.105719Z",
     "updated_at": "2025-11-06T09:56:58.945927Z",
     "id": 1
+  },
+  {
+    "resort_id": 1,
+    "resort_name": "Arcadia Beach Resort",
+    "guest_name": "Kim Ruzzel Enteria",
+    "street_address": "Zone 1, Bulan",
+    "municipality": "Legazpi City",
+    "region": "Bicol Region (Region V)",
+    "country": "Philippines",
+    "valid_id": {
+      "type": "Passport",
+      "number": "A1234567"
+    },
+    "contact": {
+      "phone": "09171234567",
+      "email": "test@example.com"
+    },
+    "checkin_date": "2025-10-10",
+    "checkout_date": "2025-10-12",
+    "guests": 2,
+    "payment_gateway": "GCash",
+    "room_type": "Standard Room",
+    "notes": "None",
+    "created_at": "2025-11-06T11:22:15.145050Z",
+    "updated_at": "2025-11-06T11:22:15.145050Z",
+    "id": 2
+  },
+  {
+    "resort_id": 1,
+    "resort_name": "Arcadia Beach Resort",
+    "guest_name": "Jonathan Jordan",
+    "street_address": "Zone 1, Bulan",
+    "municipality": "Legazpi City",
+    "region": "Bicol Region (Region V)",
+    "country": "Philippines",
+    "valid_id": {
+      "type": "Passport",
+      "number": "A1234567"
+    },
+    "contact": {
+      "phone": "09171234567",
+      "email": "kimenteria@example.com"
+    },
+    "checkin_date": "2025-10-10",
+    "checkout_date": "2025-10-12",
+    "guests": 1,
+    "payment_gateway": "GCash",
+    "room_type": "Standard Room",
+    "notes": "None",
+    "created_at": "2025-11-06T11:35:20.146920Z",
+    "updated_at": "2025-11-06T12:12:09.068525Z",
+    "id": 3
   }
 ]

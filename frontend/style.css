@@ -26,9 +26,7 @@ form {
   gap: 0.7rem;
 }
 
-label {
-  font-weight: bold;
-}
+label { font-weight: bold; }
 
 input, select, button {
   padding: 0.6rem;
@@ -49,14 +47,9 @@ button {
   transition: 0.2s;
 }
 
-button:hover {
-  background-color: #0056b3;
-}
+button:hover { background-color: #0056b3; }
 
-.cancel-btn {
-  background-color: #999;
-  margin-top: 0.5rem;
-}
+.cancel-btn { background-color: #999; margin-top: 0.5rem; }
 
 table {
   width: 100%;
@@ -73,10 +66,7 @@ th, td {
   border-bottom: 1px solid #ddd;
 }
 
-th {
-  background: #0056b3;
-  color: white;
-}
+th { background: #0056b3; color: white; }
 
 .action-btn {
   padding: 0.4rem 0.6rem;
@@ -90,7 +80,6 @@ th {
 .edit-btn { background: #ffc107; color: black; }
 .delete-btn { background: #dc3545; }
 
-/* === MODAL === */
 .modal {
   display: none;
   position: fixed;
@@ -110,21 +99,6 @@ th {
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
-.close {
-  float: right;
-  font-size: 24px;
-  cursor: pointer;
-}
+.close { float: right; font-size: 24px; cursor: pointer; }
 
-.view-btn {
-  background-color: #17a2b8;
-  color: white;
-}
-
-.view-btn:hover {
-  background-color: #117a8b;
-}
-
-button {
-  transition: background-color 0.2s ease;
-}
+button { transition: background-color 0.2s ease; }

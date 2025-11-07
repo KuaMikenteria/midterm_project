@@ -69,6 +69,7 @@
         "United Arab Emirates"
       ]
     },
+
     "address": { "type": "string" },
 
     "valid_id": {
@@ -104,14 +105,8 @@
       }
     },
 
-    "checkin_date": {
-      "type": "string",
-      "format": "date"
-    },
-    "checkout_date": {
-      "type": "string",
-      "format": "date"
-    },
+    "checkin_date": { "type": "string", "format": "date" },
+    "checkout_date": { "type": "string", "format": "date" },
     "guests": { "type": "integer", "minimum": 1 },
 
     "payment_gateway": {
@@ -131,10 +126,7 @@
     "room_type": { "type": "string" },
     "notes": { "type": "string" },
 
-    "created_at": {
-      "type": "string",
-      "format": "date-time"
-    },
+    "created_at": { "type": "string", "format": "date-time" },
     "updated_at": { "type": "string", "format": "date-time" }
   },
   "additionalProperties": false

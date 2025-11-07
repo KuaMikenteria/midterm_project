@@ -5,16 +5,15 @@ const tableBody = document.querySelector("#reservationsTable tbody");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 const submitBtn = document.getElementById("submitBtn");
 
-// Safety: ensure required DOM elements exist
+// Safety
 if (!form || !tableBody) {
-  console.error("Required DOM elements not found (form or table). Make sure script.js is loaded after HTML elements.");
+  console.error("Required DOM elements not found.");
 }
 
-// State for edit
 let editMode = false;
 let editId = null;
 
-// ✅ Strict PH phone validation (only 09XXXXXXXXX, 11 digits)
+// strict 09XXXXXXXXX
 const phoneInput = document.getElementById("phone");
 if (phoneInput) {
   phoneInput.addEventListener("input", () => {
@@ -27,17 +26,14 @@ if (phoneInput) {
   });
 }
 
-// --- Fetch & display reservations ---
 async function fetchReservations() {
   try {
     const res = await fetch(API_URL);
     const data = await res.json();
     tableBody.innerHTML = "";
 
-    // Show newest first
     data.slice().reverse().forEach(record => {
       const tr = document.createElement("tr");
-
       const address = [
         record.street_address || "",
         record.municipality || "",
@@ -68,7 +64,6 @@ async function fetchReservations() {
   }
 }
 
-// --- Helper to escape HTML ---
 function escapeHtml(str) {
   if (!str && str !== 0) return "";
   return String(str)
@@ -78,14 +73,10 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
-// --- View Reservation ---
 async function viewReservation(id) {
   try {
     const res = await fetch(`${API_URL}/${id}`);
-    if (!res.ok) {
-      alert("Failed to fetch reservation details.");
-      return;
-    }
+    if (!res.ok) { alert("Failed to fetch reservation details."); return; }
     const r = await res.json();
     alert(
 `Reservation #${r.id}
@@ -107,14 +98,12 @@ Created: ${r.created_at || ""}`
   }
 }
 
-// --- Edit Reservation ---
 async function editReservation(id) {
   try {
     const res = await fetch(`${API_URL}/${id}`);
     if (!res.ok) { alert("Reservation not found"); return; }
     const record = await res.json();
 
-    // Populate form fields
     form.guest_name.value = record.guest_name || "";
     form.street_address.value = record.street_address || "";
     form.municipality.value = record.municipality || "";
@@ -135,7 +124,6 @@ async function editReservation(id) {
     form.guests.value = record.guests || 1;
     form.payment_gateway.value = record.payment_gateway || "";
 
-    // Set edit state
     editMode = true;
     editId = id;
     submitBtn.textContent = "Update Reservation";
@@ -147,7 +135,6 @@ async function editReservation(id) {
   }
 }
 
-// --- Delete Reservation ---
 async function deleteReservation(id) {
   if (!confirm("Delete this reservation?")) return;
   try {
@@ -164,7 +151,6 @@ async function deleteReservation(id) {
   }
 }
 
-// --- Table Actions (View/Edit/Delete) ---
 tableBody.addEventListener("click", (e) => {
   const btn = e.target;
   const id = btn.dataset.id;
@@ -175,11 +161,9 @@ tableBody.addEventListener("click", (e) => {
   else if (btn.classList.contains("delete-btn")) deleteReservation(id);
 });
 
-// --- Submit (Create / Update) ---
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // ✅ Strict 09XXXXXXXXX validation
   const phoneVal = form.phone.value.trim();
   const phonePattern = /^09\d{9}$/;
   if (!phonePattern.test(phoneVal)) {
@@ -187,7 +171,6 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  // Ensure checkout > checkin
   if (form.checkin_date.value && form.checkout_date.value) {
     if (new Date(form.checkout_date.value) <= new Date(form.checkin_date.value)) {
       alert("Checkout date must be later than check-in date.");
@@ -243,7 +226,6 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-// --- Cancel Edit ---
 if (cancelEditBtn) {
   cancelEditBtn.addEventListener("click", () => {
     form.reset();
@@ -254,5 +236,4 @@ if (cancelEditBtn) {
   });
 }
 
-// --- Initial Load ---
 fetchReservations();
