@@ -1,141 +1,221 @@
-from flask import Flask, jsonify, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
-import os
-from datetime import datetime
+import random
+import string
 from jsonschema import validate, ValidationError
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
 
-# === Base paths ===
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-RESERVATIONS_FILE = os.path.join(BASE_DIR, "reservations.json")
-SCHEMA_FILE = os.path.join(BASE_DIR, "reservation.json")
+DATA_FILE = "reservations.json"
 
-# === Load reservations ===
-if os.path.exists(RESERVATIONS_FILE):
-    with open(RESERVATIONS_FILE, "r") as f:
-        try:
-            reservations = json.load(f)
-        except json.JSONDecodeError:
-            reservations = []
-else:
-    reservations = []
-
-# === Load schema ===
-with open(SCHEMA_FILE, "r") as f:
-    reservation_schema = json.load(f)
+##############################
+#  AUTO-GENERATE SMS TOKEN   #
+##############################
+def generate_sms_token():
+    letters_digits = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+    return f"BK-{letters_digits}"
 
 
-# === GET /reservations ===
+##############################
+#       JSON FILE I/O        #
+##############################
+def load_reservations():
+    try:
+        with open(DATA_FILE, "r") as f:
+            return json.load(f)
+    except:
+        return []
+
+def save_reservations(data):
+    with open(DATA_FILE, "w") as f:
+        json.dump(data, f, indent=4)
+
+
+###########################################
+#     UPDATED RESERVATION JSON SCHEMA     #
+###########################################
+reservation_schema = {
+    "type": "object",
+    "required": [
+        "resort_id",
+        "resort_name",
+        "guest_name",
+        "street_address",
+        "municipality",
+        "region",
+        "country",
+        "valid_id",
+        "contact",
+        "checkin_date",
+        "checkout_date",
+        "guests",
+        "payment_gateway",
+        "created_at"
+    ],
+
+    "properties": {
+        "id": {"type": "integer", "minimum": 1},
+
+        "resort_id": {"type": "integer", "minimum": 1},
+        "resort_name": {"type": "string"},
+        "guest_name": {"type": "string"},
+        "street_address": {"type": "string"},
+
+        "municipality": {"type": "string"},
+        "region": {"type": "string"},
+        "country": {"type": "string"},
+
+        "valid_id": {
+            "type": "object",
+            "required": ["type", "number"],
+            "properties": {
+                "type": {"type": "string"},
+                "number": {"type": "string", "minLength": 3}
+            },
+            "additionalProperties": False
+        },
+
+        "contact": {
+            "type": "object",
+            "required": ["phone", "email"],
+            "properties": {
+                "phone": {"type": "string", "pattern": "^09\\d{9}$"},
+                "email": {"type": "string", "format": "email"}
+            },
+            "additionalProperties": False
+        },
+
+        "checkin_date": {"type": "string"},
+        "checkout_date": {"type": "string"},
+        "guests": {"type": "integer", "minimum": 1},
+
+        "payment_gateway": {"type": "string"},
+
+        "room_type": {"type": "string"},
+        "notes": {"type": "string"},
+
+        "sms_token": {
+            "type": "string",
+            "pattern": "^BK-[A-Z0-9]{5}$"
+        },
+
+        "created_at": {"type": "string"},
+        "updated_at": {"type": "string"}
+    },
+
+    "additionalProperties": False
+}
+
+
+
+###########################################
+#             API ENDPOINTS               #
+###########################################
+
+
+### GET ALL ###
 @app.route("/reservations", methods=["GET"])
 def get_reservations():
-    return jsonify(reservations), 200
+    return jsonify(load_reservations())
 
 
-# === POST /reservations ===
+### POST: CREATE ###
 @app.route("/reservations", methods=["POST"])
-def add_reservation():
-    data = request.get_json()
-    print("📩 Received POST data:", data)
+def create_reservation():
+    reservation = request.get_json()
 
-    # Assign unique ID
-    data["id"] = len(reservations) + 1
+    # Auto-assign dates if frontend did not send
+    reservation["created_at"] = reservation.get("created_at", datetime.utcnow().isoformat() + "Z")
+    reservation["updated_at"] = reservation["created_at"]
 
-    # PERSONAL DETAILS
+    # Auto-generate SMS token
+    reservation["sms_token"] = generate_sms_token()
 
-    # Construct contact
-    data["contact"] = {
-        "phone": data.pop("phone", ""),
-        "email": data.pop("email", "")
-    }
-
-    # Construct valid_id
-    data["valid_id"] = {
-        "type": data.pop("valid_id_type", ""),
-        "number": data.pop("valid_id_number", "")
-    }
-
-    #BOKING DETAILS
-    # Normalize guests
+    # Validate
     try:
-        data["guests"] = int(data.get("guests", 1))
-    except (ValueError, TypeError):
-        return jsonify({"error": "Guests must be an integer"}), 400
-
-    # Default resort_id
-    data["resort_id"] = data.get("resort_id", 1)
-
-    # Add timestamps
-    now = datetime.now().isoformat() + "Z"
-    data["created_at"] = now
-    data["updated_at"] = now
-
-    # Validate against schema
-    try:
-        validate(instance=data, schema=reservation_schema)
+        validate(instance=reservation, schema=reservation_schema)
     except ValidationError as e:
-        print("❌ Schema Validation Error:", e.message)
         return jsonify({"error": f"Schema validation failed: {e.message}"}), 400
 
     # Save
-    reservations.append(data)
-    with open(RESERVATIONS_FILE, "w") as f:
-        json.dump(reservations, f, indent=2)
+    data = load_reservations()
+    reservation["id"] = len(data) + 1
+    data.append(reservation)
+    save_reservations(data)
 
-    print("✅ Reservation added successfully!")
-    return jsonify({"message": "Reservation added successfully!", "data": data}), 201
-
-
-# === PUT /reservations/<id> ===
-# === GET /reservations/<id> ===
-@app.route("/reservations/<int:res_id>", methods=["GET"])
-def get_reservation_by_id(res_id):
-    for res in reservations:
-        if res["id"] == res_id:
-            return jsonify(res), 200
-    return jsonify({"error": "Reservation not found"}), 404
-
-@app.route("/reservations/<int:res_id>", methods=["PUT"])
-def update_reservation(res_id):
-    data = request.get_json()
-    print(f"✏️ Updating reservation {res_id}: {data}")
-
-    for res in reservations:
-        if res["id"] == res_id:
-            res.update({
-                "guest_name": data.get("guest_name", res["guest_name"]),
-                "street_address": data.get("street_address", res["street_address"]),
-                "municipality": data.get("municipality", res["municipality"]),
-                "region": data.get("region", res["region"]),
-                "country": data.get("country", res["country"]),
-                "valid_id": data.get("valid_id", res["valid_id"]),
-                "resort_name": data.get("resort_name", res.get("resort_name")),
-                "guests": int(data.get("guests", res["guests"])),
-                "updated_at": datetime.now().isoformat() + "Z"
-            })
-            with open(RESERVATIONS_FILE, "w") as f:
-                json.dump(reservations, f, indent=2)
-            return jsonify({"message": "Reservation updated successfully!", "data": res}), 200
-
-    return jsonify({"error": "Reservation not found"}), 404
+    return jsonify({"message": "Reservation stored", "sms_token": reservation["sms_token"]})
 
 
-# === DELETE /reservations/<id> ===
-@app.route("/reservations/<int:res_id>", methods=["DELETE"])
-def delete_reservation(res_id):
-    global reservations
-    new_reservations = [r for r in reservations if r["id"] != res_id]
+### PUT: FULL UPDATE ###
+@app.route("/reservations/<int:index>", methods=["PUT"])
+def update_reservation(index):
+    data = load_reservations()
 
-    if len(new_reservations) == len(reservations):
-        return jsonify({"error": "Reservation not found"}), 404
+    if index >= len(data):
+        return jsonify({"error": "Index out of range"}), 404
 
-    reservations = new_reservations
-    with open(RESERVATIONS_FILE, "w") as f:
-        json.dump(reservations, f, indent=2)
+    updated = request.get_json()
 
-    return jsonify({"message": f"Reservation {res_id} deleted successfully!"}), 200
+    # Preserve SMS token + ID + created_at
+    updated["sms_token"] = data[index]["sms_token"]
+    updated["id"] = data[index]["id"]
+    updated["created_at"] = data[index]["created_at"]
+    updated["updated_at"] = datetime.utcnow().isoformat() + "Z"
+
+    # Validate
+    try:
+        validate(instance=updated, schema=reservation_schema)
+    except ValidationError as e:
+        return jsonify({"error": f"Schema validation failed: {e.message}"}), 400
+
+    data[index] = updated
+    save_reservations(data)
+
+    return jsonify({"message": "Reservation updated"})
+
+
+### PATCH: PARTIAL UPDATE ###
+@app.route("/reservations/<int:index>", methods=["PATCH"])
+def patch_reservation(index):
+    data = load_reservations()
+
+    if index >= len(data):
+        return jsonify({"error": "Index out of range"}), 404
+
+    incoming = request.get_json()
+
+    # Apply only provided fields
+    for key, value in incoming.items():
+        data[index][key] = value
+
+    # Update timestamp
+    data[index]["updated_at"] = datetime.utcnow().isoformat() + "Z"
+
+    # Re-validate full record
+    try:
+        validate(instance=data[index], schema=reservation_schema)
+    except ValidationError as e:
+        return jsonify({"error": f"Schema validation failed: {e.message}"}), 400
+
+    save_reservations(data)
+    return jsonify({"message": "Reservation patched"})
+
+
+### DELETE ###
+@app.route("/reservations/<int:index>", methods=["DELETE"])
+def delete_reservation(index):
+    data = load_reservations()
+
+    if index >= len(data):
+        return jsonify({"error": "Index out of range"}), 404
+
+    data.pop(index)
+    save_reservations(data)
+
+    return jsonify({"message": "Reservation deleted"})
 
 
 if __name__ == "__main__":
