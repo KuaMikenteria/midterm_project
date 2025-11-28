@@ -26,32 +26,6 @@
   {
     "resort_id": 1,
     "resort_name": "Arcadia Beach Resort",
-    "guest_name": "Kim Ruzzel Enteria",
-    "street_address": "Zone 1, Bulan",
-    "municipality": "Legazpi City",
-    "region": "Bicol Region (Region V)",
-    "country": "Philippines",
-    "valid_id": {
-      "type": "Passport",
-      "number": "A1234567"
-    },
-    "contact": {
-      "phone": "09171234567",
-      "email": "test@example.com"
-    },
-    "checkin_date": "2025-10-10",
-    "checkout_date": "2025-10-12",
-    "guests": 2,
-    "payment_gateway": "GCash",
-    "room_type": "Standard Room",
-    "notes": "None",
-    "created_at": "2025-11-06T11:22:15.145050Z",
-    "updated_at": "2025-11-06T11:22:15.145050Z",
-    "id": 2
-  },
-  {
-    "resort_id": 1,
-    "resort_name": "Arcadia Beach Resort",
     "guest_name": "Jonathan Jordan",
     "street_address": "Zone 1, Bulan",
     "municipality": "Legazpi City",
@@ -74,32 +48,6 @@
     "created_at": "2025-11-06T11:35:20.146920Z",
     "updated_at": "2025-11-06T12:12:09.068525Z",
     "id": 3
-  },
-  {
-    "resort_name": "Arcadia Beach Resort",
-    "guest_name": "Kim Ruzzel Enteria",
-    "street_address": "Zone-1",
-    "municipality": "Quezon City",
-    "region": "Cagayan Valley (Region II)",
-    "country": "Japan",
-    "checkin_date": "2025-11-07",
-    "checkout_date": "2025-11-21",
-    "guests": 9,
-    "payment_gateway": "Philippine National Bank",
-    "contact": {
-      "phone": "09171234567",
-      "email": "hayersorodothy.92@gmail.com"
-    },
-    "valid_id": {
-      "type": "School ID",
-      "number": "1234-4567-8907-1234"
-    },
-    "resort_id": 1,
-    "created_at": "2025-11-07T10:28:54.907505Z",
-    "updated_at": "2025-11-07T10:28:54.907505Z",
-    "room_type": "",
-    "notes": "",
-    "id": 4
   },
   {
     "resort_name": "Kuya Boy Beach Resort",
@@ -126,5 +74,32 @@
     "created_at": "2025-11-07T10:34:40.082351Z",
     "updated_at": "2025-11-07T10:37:56.558055Z",
     "id": 5
+  },
+  {
+    "resort_name": "Kuya Boy Beach Resort",
+    "guest_name": "Kim Enteria Kritiko",
+    "street_address": "Zone-1",
+    "municipality": "Quezon City",
+    "region": "National Capital Region (NCR)",
+    "country": "South Korea",
+    "checkin_date": "2025-11-28",
+    "checkout_date": "2025-11-30",
+    "guests": 9,
+    "payment_gateway": "Philippine National Bank",
+    "contact": {
+      "phone": "09171234567",
+      "email": "kim.enteria@sorsu.edu.ph"
+    },
+    "valid_id": {
+      "type": "SSS card",
+      "number": "1234-5678-9876-0000"
+    },
+    "resort_id": 1,
+    "created_at": "2025-11-28T14:52:17.360609Z",
+    "updated_at": "2025-11-28T14:52:17.360609Z",
+    "sms_token": "BK-O46344",
+    "room_type": "",
+    "notes": "",
+    "id": 6
   }
 ]

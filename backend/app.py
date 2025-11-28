@@ -5,8 +5,16 @@ import os
 from datetime import datetime, timezone
 from jsonschema import validate, ValidationError
 import re
+import random
+import string
 
 app = Flask(__name__)
+
+#generate token
+def generate_sms_token():
+    letters = ''.join(random.choices(string.ascii_uppercase, k=1))
+    digits = ''.join(random.choices(string.digits, k=5))
+    return f"BK-{letters}{digits}"
 
 # CORS
 CORS(
@@ -181,6 +189,11 @@ def add_reservation():
     data["created_at"] = now
     data["updated_at"] = now
 
+    # generate SMS token only on creation
+    data["sms_token"] = generate_sms_token()
+
+    
+
     data.setdefault("resort_name", "")
     data.setdefault("street_address", "")
     data.setdefault("municipality", "")
@@ -240,6 +253,9 @@ def update_reservation(res_id):
         "type": incoming["valid_id"]["type"] or existing["valid_id"].get("type", ""),
         "number": incoming["valid_id"]["number"] or existing["valid_id"].get("number", ""),
     }
+
+    #sms token
+    merged["sms_token"] = existing.get("sms_token")
 
     if incoming.get("guests") is not None:
         merged["guests"] = incoming["guests"]
