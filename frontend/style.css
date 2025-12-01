@@ -1,3 +1,28 @@
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("resort-bg.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  filter: blur(8px) brightness(0.8);
+  z-index: -1;
+}
+
+.container {
+  backdrop-filter: blur(2px);
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+}
+
 body {
   font-family: "Segoe UI", sans-serif;
   background: #bdcae1;
