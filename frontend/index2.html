@@ -1,196 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Resort Reservation</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>🏝️ Resort Reservation Form</h1>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking CRUD</title>
+  <style>
+    body { font-family: Arial; max-width: 900px; margin: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 8px; border: 1px solid #ccc; text-align: left; }
+    th { background: #eee; }
 
-      <form id="reservationForm">
-        <input type="hidden" id="reservation_id" name="reservation_id" />
-        <h3>Personal Details</h3>
+    /* Hidden input field */
+    .hidden-field {
+      display: none;
+    }
 
-        <label>Full Name</label>
-        <input type="text" id="guest_name" name="guest_name" required />
+    .form-box {
+      border: 1px solid #aaa;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      background: #f7f7f7;
+    }
 
-        <label>Street Address</label>
-        <input type="text" id="street_address" name="street_address" required />
+    .form-box label {
+      display: block;
+      margin-top: 10px;
+    }
 
-        <label>Municipality / City</label>
-        <select id="municipality" name="municipality" required>
-          <option value="">-- Select Municipality / City --</option>
-          <option>Quezon City</option>
-          <option>Manila</option>
-          <option>Cebu City</option>
-          <option>Davao City</option>
-          <option>Baguio</option>
-          <option>Iloilo City</option>
-          <option>Bacolod</option>
-          <option>Zamboanga City</option>
-          <option>Naga City</option>
-          <option>Legazpi City</option>
-        </select>
+    .form-box input {
+      width: 100%;
+      padding: 7px;
+      margin-top: 3px;
+    }
 
-        <label>Region / State</label>
-        <select id="region" name="region" required>
-          <option value="">-- Select Region --</option>
-          <option>National Capital Region (NCR)</option>
-          <option>Ilocos Region (Region I)</option>
-          <option>Cagayan Valley (Region II)</option>
-          <option>Central Luzon (Region III)</option>
-          <option>CALABARZON (Region IV-A)</option>
-          <option>MIMAROPA (Region IV-B)</option>
-          <option>Bicol Region (Region V)</option>
-          <option>Western Visayas (Region VI)</option>
-          <option>Central Visayas (Region VII)</option>
-          <option>Davao Region (Region XI)</option>
-        </select>
+    button {
+      margin-top: 20px;
+      padding: 10px 18px;
+      cursor: pointer;
+    }
 
-        <label>Country</label>
-        <select id="country" name="country" required>
-          <option value="">-- Select Country --</option>
-          <option>Philippines</option>
-          <option>United States</option>
-          <option>Japan</option>
-          <option>China</option>
-          <option>Australia</option>
-          <option>Canada</option>
-          <option>Singapore</option>
-          <option>South Korea</option>
-          <option>United Kingdom</option>
-          <option>United Arab Emirates</option>
-        </select>
+  </style>
+</head>
+<body>
 
-        <label>Valid ID Type</label>
-        <select id="valid_id_type" name="valid_id_type" required>
-          <option value="">-- Select Valid ID --</option>
-          <option>PhilID/ePhilID</option>
-          <option>Passport</option>
-          <option>Driver's License</option>
-          <option>SSS card</option>
-          <option>GSIS card (UMID)</option>
-          <option>PRC ID</option>
-          <option>School ID</option>
-        </select>
+  <h1>Booking System</h1>
 
-        <label>Valid ID Number</label>
-        <input type="text" id="valid_id_number" name="valid_id_number" required />
+  <div class="form-box">
+    <h2 id="form-title">Add Booking</h2>
 
-        <label>Email</label>
-        <input type="email" id="email" name="email" required />
+    <label>Name:</label>
+    <input type="text" id="name">
 
-        <label>Phone</label>
-        <input
-          type="tel"
-          id="phone"
-          name="phone"
-          pattern="^09\d{9}$"
-          title="Please enter a valid PH mobile number (11 digits, e.g., 09171234567)"
-          maxlength="11"
-          required
-        />
+    <label>Email:</label>
+    <input type="email" id="email">
 
-        <h3>Booking Details</h3>
+    <label>Booking Date:</label>
+    <input type="date" id="date">
 
-        <label>Resort Name</label>
-        <select id="resort_name" name="resort_name" required>
-          <option value="">-- Select Resort --</option>
-          <option>Arcadia Beach Resort</option>
-          <option>Kuya Boy Beach Resort</option>
-          <option>Blue Horizon Resort</option>
-          <option>White Sand Paradise</option>
-          <option>Mountain View Villa</option>
-        </select>
+    <!-- Hidden SMS Token (Option 1) -->
+    <input type="text" id="sms_token" class="hidden-field" disabled>
 
-        <label>Check-In Date</label>
-        <input type="date" id="checkin_date" name="checkin_date" required />
+    <button onclick="submitForm()">Submit</button>
+    <button onclick="resetForm()">Reset</button>
+  </div>
 
-        <label>Check-Out Date</label>
-        <input type="date" id="checkout_date" name="checkout_date" required />
+  <h2>Booking Records</h2>
+  <table id="booking-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Date</th>
+        <th>SMS Token</th> <!-- visible only in table -->
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-        <label>Number of Guests</label>
-        <input type="number" id="guests" name="guests" min="1" required />
+  <script src="script.js"></script>
 
-        <label>Payment Gateway</label>
-        <select id="payment_gateway" name="payment_gateway" required>
-          <option>Philippine National Bank</option>
-          <option>BDO Unibank, Inc. (BDO)</option>
-          <option>Bank of the Philippine Islands (BPI)</option>
-          <option>Union Bank of the Philippines (Unionbank)</option>
-          <option>Land Bank of the Philippines (Landbank)</option>
-          <option>GCash</option>
-          <option>PayMaya</option>
-          <option>PayPal</option>
-        </select>
-
-        <div style="display:flex; gap:.5rem; margin-top:.5rem;">
-          <button type="submit" id="submitBtn">Create Reservation</button>
-          <button type="button" id="cancelEditBtn" class="cancel-btn" style="display:none;">Cancel Edit</button>
-        </div>
-      </form>
-
-      <h2>Reservations Database</h2>
-      <table id="reservationsTable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Guest</th>
-            <th>Address</th>
-            <th>Resort</th>
-            <th>Check-In</th>
-            <th>Check-Out</th>
-            <th>Guests</th>
-            <th>Payment</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <!-- View Modal -->
-    <div id="viewModal" class="modal" aria-hidden="true">
-      <div class="modal-content">
-        <span class="close" id="closeModal">&times;</span>
-        <h3>Reservation Details</h3>
-        <pre id="modalDetails"></pre>
-      </div>
-    </div>
-
-    <script src="script.js"></script>
-  </body>
+</body>
 </html>
-
-<!-- {
-  "resort_id": 1,
-  "resort_name": "Arcadia Beach Resort",
-  "guest_name": "Kim Enteria",
-  "street_address": "Zone 1",
-  "municipality": "Quezon City",
-  "region": "National Capital Region (NCR)",
-  "country": "Philippines",
-
-  "valid_id": {
-    "type": "PhilID/ePhilID",
-    "number": "1234-5678-9012"
-  },
-
-  "contact": {
-    "phone": "09171234567",
-    "email": "kim.enteria@example.com"
-  },
-
-  "checkin_date": "2025-12-10",
-  "checkout_date": "2025-12-15",
-  "guests": 4,
-  "payment_gateway": "GCash",
-
-  "room_type": "Family Room",
-  "notes": "Non-smoking, near the beach",
-  
-  "created_at": "2025-11-07T10:15:30Z"
-} -->

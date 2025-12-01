@@ -1,6 +1,6 @@
 body {
   font-family: "Segoe UI", sans-serif;
-  background: #eef4ff;
+  background: #bdcae1;
   color: #333;
   margin: 0;
   padding: 2rem;
@@ -9,7 +9,7 @@ body {
 .container {
   max-width: 900px;
   margin: auto;
-  background: #fff;
+  background: #ffe7fb;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -105,4 +105,34 @@ th { background: #0056b3; color: white; }
   float: right;
   font-size: 24px;
   cursor: pointer;
+}
+
+/* TWO COLUMN LAYOUT */
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* CARD STYLE */
+.card {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+/* BUTTON ROW */
+.btn-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Responsive: stack columns on small screens */
+@media (max-width: 780px) {
+  .two-column {
+    grid-template-columns: 1fr;
+  }
 }

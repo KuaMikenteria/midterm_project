@@ -101,5 +101,32 @@
     "room_type": "",
     "notes": "",
     "id": 6
+  },
+  {
+    "resort_id": 1,
+    "resort_name": "Arcadia Beach Resort",
+    "guest_name": "Kim Enteria",
+    "street_address": "Zone 1",
+    "municipality": "Quezon City",
+    "region": "National Capital Region (NCR)",
+    "country": "Philippines",
+    "valid_id": {
+      "type": "PhilID/ePhilID",
+      "number": "1234-5678-9012"
+    },
+    "contact": {
+      "phone": "09171234567",
+      "email": "kim.enteria@example.com"
+    },
+    "checkin_date": "2025-12-10",
+    "checkout_date": "2025-12-15",
+    "guests": 4,
+    "payment_gateway": "GCash",
+    "room_type": "Family Room",
+    "notes": "Non-smoking, near the beach",
+    "created_at": "2025-11-28T15:09:05.453756Z",
+    "updated_at": "2025-11-28T15:09:05.453756Z",
+    "sms_token": "BK-U13071",
+    "id": 7
   }
 ]
