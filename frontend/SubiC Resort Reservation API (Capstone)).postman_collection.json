@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "2a601f3c-b7de-4460-8154-84bd97d72ec3",
+		"name": "SubiC Resort Reservation API (Capstone))",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39953229",
+		"_collection_link": "https://bsit-4-1.postman.co/workspace/BSIT-4-1-Lab~07e8bc99-df85-4a34-b2c5-a5332e4ba79c/collection/39953229-2a601f3c-b7de-4460-8154-84bd97d72ec3?action=share&source=collection_link&creator=39953229"
+	},
+	"item": [
+		{
+			"name": "GET",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \"resort_id\": 1,\r\n  \"resort_name\": \"Arcadia Beach Resort\",\r\n  \"guest_name\": \"Kim Enteria\",\r\n  \"street_address\": \"Zone 1\",\r\n  \"municipality\": \"Quezon City\",\r\n  \"region\": \"National Capital Region (NCR)\",\r\n  \"country\": \"Philippines\",\r\n\r\n  \"valid_id\": {\r\n    \"type\": \"PhilID/ePhilID\",\r\n    \"number\": \"1234-5678-9012\"\r\n  },\r\n\r\n  \"contact\": {\r\n    \"phone\": \"09171234567\",\r\n    \"email\": \"kim.enteria@example.com\"\r\n  },\r\n\r\n  \"checkin_date\": \"2025-12-10\",\r\n  \"checkout_date\": \"2025-12-15\",\r\n  \"guests\": 4,\r\n  \"payment_gateway\": \"GCash\",\r\n\r\n  \"room_type\": \"Family Room\",\r\n  \"notes\": \"Non-smoking, near the beach\",\r\n  \r\n  \"created_at\": \"2025-11-07T10:15:30Z\"}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/reservations/10",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"reservations",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET-filtering",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \"resort_id\": 1,\r\n  \"resort_name\": \"Arcadia Beach Resort\",\r\n  \"guest_name\": \"Kim Enteria\",\r\n  \"street_address\": \"Zone 1\",\r\n  \"municipality\": \"Quezon City\",\r\n  \"region\": \"National Capital Region (NCR)\",\r\n  \"country\": \"Philippines\",\r\n\r\n  \"valid_id\": {\r\n    \"type\": \"PhilID/ePhilID\",\r\n    \"number\": \"1234-5678-9012\"\r\n  },\r\n\r\n  \"contact\": {\r\n    \"phone\": \"09171234567\",\r\n    \"email\": \"kim.enteria@example.com\"\r\n  },\r\n\r\n  \"checkin_date\": \"2025-12-10\",\r\n  \"checkout_date\": \"2025-12-15\",\r\n  \"guests\": 4,\r\n  \"payment_gateway\": \"GCash\",\r\n\r\n  \"room_type\": \"Family Room\",\r\n  \"notes\": \"Non-smoking, near the beach\",\r\n  \r\n  \"created_at\": \"2025-11-07T10:15:30Z\"}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/reservations",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"reservations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \"resort_id\": 1,\r\n  \"resort_name\": \"Arcadia Beach Resort\",\r\n  \"guest_name\": \"Mik Kritikomento\",\r\n  \"street_address\": \"Zone 20\",\r\n  \"municipality\": \"Quezon City\",\r\n  \"region\": \"National Capital Region (NCR)\",\r\n  \"country\": \"Philippines\",\r\n\r\n  \"valid_id\": {\r\n    \"type\": \"PhilID/ePhilID\",\r\n    \"number\": \"1234-5678-9012\"\r\n  },\r\n\r\n  \"contact\": {\r\n    \"phone\": \"09171234567\",\r\n    \"email\": \"kim.enteria@example.com\"\r\n  },\r\n\r\n  \"checkin_date\": \"2025-12-10\",\r\n  \"checkout_date\": \"2025-12-15\",\r\n  \"guests\": 4,\r\n  \"payment_gateway\": \"GCash\",\r\n\r\n  \"room_type\": \"Family Room\",\r\n  \"notes\": \"Non-smoking, near the beach\",\r\n  \r\n  \"created_at\": \"2025-11-07T10:15:30Z\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/reservations",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"reservations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"municipality\": \"Bulan\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/reservations/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"reservations",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \"resort_id\": 1,\r\n  \"resort_name\": \"Arcadia Beach Resort\",\r\n  \"guest_name\": \"Kim Enteria\",\r\n  \"street_address\": \"Zone 1\",\r\n  \"municipality\": \"Quezon City\",\r\n  \"region\": \"National Capital Region (NCR)\",\r\n  \"country\": \"Philippines\",\r\n\r\n  \"valid_id\": {\r\n    \"type\": \"PhilID/ePhilID\",\r\n    \"number\": \"1234-5678-9012\"\r\n  },\r\n\r\n  \"contact\": {\r\n    \"phone\": \"09171234567\",\r\n    \"email\": \"kim.enteria@example.com\"\r\n  },\r\n\r\n  \"checkin_date\": \"2025-12-10\",\r\n  \"checkout_date\": \"2025-12-15\",\r\n  \"guests\": 4,\r\n  \"payment_gateway\": \"GCash\",\r\n\r\n  \"room_type\": \"Family Room\",\r\n  \"notes\": \"Non-smoking, near the beach\",\r\n  \r\n  \"created_at\": \"2025-11-07T10:15:30Z\"}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/reservations/4",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"reservations",
+						"4"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
