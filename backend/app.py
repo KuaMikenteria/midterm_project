@@ -53,7 +53,6 @@ def next_id():
 def now_utc_iso():
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
-
 ALLOWED_VALID_IDS = {
     "PhilID/ePhilID",
     "Passport",
@@ -65,7 +64,6 @@ ALLOWED_VALID_IDS = {
 }
 
 PHONE_REGEX = re.compile(r"^09\d{9}$")
-
 
 def normalize_payload(data: dict) -> dict:
     """
@@ -114,7 +112,6 @@ def normalize_payload(data: dict) -> dict:
 
     return data
 
-
 def validate_business_rules(data: dict):
     phone = data.get("contact", {}).get("phone", "")
     if not PHONE_REGEX.match(phone or ""):
@@ -142,14 +139,12 @@ def validate_business_rules(data: dict):
 
     return None
 
-
 def validate_against_schema(full_record: dict):
     try:
         validate(instance=full_record, schema=reservation_schema)
     except ValidationError as e:
         return f"Schema validation failed: {e.message}"
     return None
-
 
 @app.after_request
 def add_cors_headers(resp):
@@ -158,17 +153,14 @@ def add_cors_headers(resp):
     resp.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
     return resp
 
-
 @app.route("/reservations", methods=["OPTIONS"])
 @app.route("/reservations/<int:_id>", methods=["OPTIONS"])
 def options(_id=None):
     return make_response(("", 204))
 
-
 @app.route("/reservations", methods=["GET"])
 def get_reservations():
     return jsonify(reservations), 200
-
 
 @app.route("/reservations/<int:res_id>", methods=["GET"])
 def get_reservation_by_id(res_id):
@@ -176,7 +168,6 @@ def get_reservation_by_id(res_id):
         if res.get("id") == res_id:
             return jsonify(res), 200
     return jsonify({"error": "Reservation not found"}), 404
-
 
 @app.route("/reservations", methods=["POST"])
 def add_reservation():
@@ -191,8 +182,6 @@ def add_reservation():
 
     # generate SMS token only on creation
     data["sms_token"] = generate_sms_token()
-
-    
 
     data.setdefault("resort_name", "")
     data.setdefault("street_address", "")
@@ -278,6 +267,67 @@ def update_reservation(res_id):
 
     return jsonify({"message": "Reservation updated successfully!", "data": merged}), 200
 
+@app.route("/reservations/<int:res_id>", methods=["PATCH"])
+def patch_reservation(res_id):
+    raw = request.get_json(silent=True) or {}
+    print(f"🩹 PATCH update for reservation {res_id}: {raw}")
+
+    # Find reservation
+    idx = next((i for i, r in enumerate(reservations) if r.get("id") == res_id), None)
+    if idx is None:
+        return jsonify({"error": "Reservation not found"}), 404
+
+    existing = reservations[idx]
+    incoming = normalize_payload(raw)
+
+    # Start with a copy
+    patched = {**existing}
+
+    # --- Update only provided fields ---
+    for key, value in incoming.items():
+        # skip nested objects, handled separately
+        if key not in ("contact", "valid_id", "guests") and value not in ("", None):
+            patched[key] = value
+
+    # Contact update (partial)
+    patched["contact"] = {
+        "phone": incoming["contact"].get("phone") or existing["contact"]["phone"],
+        "email": incoming["contact"].get("email") or existing["contact"]["email"],
+    }
+
+    # Valid ID update (partial)
+    patched["valid_id"] = {
+        "type": incoming["valid_id"].get("type") or existing["valid_id"]["type"],
+        "number": incoming["valid_id"].get("number") or existing["valid_id"]["number"],
+    }
+
+    # Guests update (partial)
+    if incoming.get("guests") is not None:
+        patched["guests"] = incoming["guests"]
+
+    # sms token should not change
+    patched["sms_token"] = existing.get("sms_token")
+
+    # Set updated timestamp
+    patched["updated_at"] = now_utc_iso()
+
+    # Validate
+    err = validate_business_rules(patched)
+    if err:
+        print("❌ Business Validation Error (PATCH):", err)
+        return jsonify({"error": err}), 400
+
+    err = validate_against_schema(patched)
+    if err:
+        print("❌ Schema Validation Error (PATCH):", err)
+        return jsonify({"error": err}), 400
+
+    # Save
+    reservations[idx] = patched
+    with open(RESERVATIONS_FILE, "w") as f:
+        json.dump(reservations, f, indent=2)
+
+    return jsonify({"message": "Partial update successful!", "data": patched}), 200
 
 @app.route("/reservations/<int:res_id>", methods=["DELETE"])
 def delete_reservation(res_id):
