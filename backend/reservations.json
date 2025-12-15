@@ -25,5 +25,86 @@
     "room_type": "",
     "notes": "",
     "id": 1
+  },
+  {
+    "resort_name": "Kuya Boy Beach Resort",
+    "guest_name": "John Doe",
+    "street_address": "Zone 8",
+    "municipality": "Naga City",
+    "region": "Bicol Region (Region V)",
+    "country": "Australia",
+    "checkin_date": "2025-12-26",
+    "checkout_date": "2025-12-28",
+    "guests": 2,
+    "payment_gateway": "Bank of the Philippine Islands (BPI)",
+    "contact": {
+      "phone": "09171234567",
+      "email": "kua.kimenteria01@gmail.com"
+    },
+    "valid_id": {
+      "type": "Driver's License",
+      "number": "A12345678"
+    },
+    "resort_id": 1,
+    "created_at": "2025-12-11T01:27:59.470389Z",
+    "updated_at": "2025-12-15T08:00:38.121348Z",
+    "sms_token": "BK-E92663",
+    "room_type": "",
+    "notes": "",
+    "id": 2
+  },
+  {
+    "resort_name": "Arcadia Beach Resort",
+    "guest_name": "Jane Smith",
+    "street_address": "Zone-12",
+    "municipality": "Quezon City",
+    "region": "Western Visayas (Region VI)",
+    "country": "Australia",
+    "checkin_date": "2025-12-15",
+    "checkout_date": "2025-12-17",
+    "guests": 20,
+    "payment_gateway": "Philippine National Bank",
+    "contact": {
+      "phone": "09171234567",
+      "email": "jane.smith02@gmail.com"
+    },
+    "valid_id": {
+      "type": "Driver's License",
+      "number": "A12345678"
+    },
+    "resort_id": 1,
+    "created_at": "2025-12-15T08:09:06.363465Z",
+    "updated_at": "2025-12-15T08:09:06.363465Z",
+    "sms_token": "BK-N70863",
+    "room_type": "",
+    "notes": "",
+    "id": 3
+  },
+  {
+    "resort_name": "Blue Horizon Resort",
+    "guest_name": "Juan De La Cruz",
+    "street_address": "Sabang",
+    "municipality": "Cebu City",
+    "region": "National Capital Region (NCR)",
+    "country": "United States",
+    "checkin_date": "2025-12-15",
+    "checkout_date": "2025-12-16",
+    "guests": 12,
+    "payment_gateway": "BDO Unibank, Inc. (BDO)",
+    "contact": {
+      "phone": "09171234567",
+      "email": "delacrus@example.gov.ph"
+    },
+    "valid_id": {
+      "type": "Driver's License",
+      "number": "123456"
+    },
+    "resort_id": 1,
+    "created_at": "2025-12-15T08:10:17.523247Z",
+    "updated_at": "2025-12-15T08:10:17.523247Z",
+    "sms_token": "BK-X05775",
+    "room_type": "",
+    "notes": "",
+    "id": 4
   }
 ]

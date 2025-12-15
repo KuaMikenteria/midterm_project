@@ -346,3 +346,11 @@ def delete_reservation(res_id):
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True)
+
+
+# for municipality field in the schema
+# "municipality": {
+#     "type": "string",
+#     "minLength": 2,
+#     "maxLength": 50
+# }
